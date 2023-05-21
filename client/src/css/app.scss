@@ -1,0 +1,291 @@
+// app global css in SCSS form
+@import url(fontiran.css);
+
+$ad-font-color: #EB3C27;
+$ad-light-font-color: #7b808c;
+$ad-btn-color: #EB3C27;
+$ad-bg-color: #f8fdff;
+$ad-footer-bg-color: #f8fdff;
+
+// setting font
+q-app {
+  font-family: IRANSans !important;
+}
+q-application {
+  font-family: IRANSans !important;
+}
+body {
+  font-family: IRANSans !important;
+}
+div {
+  font-family: IRANSans !important;
+}
+
+.ad-toolbar {
+  background-color: $ad-bg-color;
+  color: $ad-font-color;
+}
+
+.ad-toolbar-dark {
+  background-color: #000000;
+  color: $ad-bg-color;
+}
+
+.ad-f {
+  background-color: $ad-footer-bg-color;
+  color: $ad-font-color;
+}
+
+.ad-f-dark {
+  background-color: #000000;
+  color: $ad-bg-color;
+}
+
+.ad-font-color {
+  color: $ad-font-color;
+}
+
+.ad-primary-btn {
+  background-color: $ad-btn-color;
+  color: #f8fdff;
+}
+
+.ad-secondary-btn {
+  color: $ad-btn-color;
+}
+
+.ad-page {
+  align-items: center;
+  justify-content: center;
+  min-height: 80vh;
+  max-width: 970px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.ad-min-width {
+  align-items: center;
+  justify-content: center;
+  max-width: 970px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.ad-box-bordered {
+  border: solid 1.2px rgb(185, 185, 185);
+  overflow: hidden;
+}
+
+.ad-blog-title {
+  color: $ad-font-color;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.ad-blog-sub-title {
+  color: $ad-font-color;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+div.scroll-menu {
+  overflow: auto;
+  white-space: nowrap;
+}
+div.scroll-menu::-webkit-scrollbar-track {
+  border-radius: 10px;
+  background-color: #f5f5f5;
+}
+
+div.scroll-menu::-webkit-scrollbar {
+  height: 5px;
+}
+
+div.scroll-menu::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color: #c2c2c2;
+}
+
+div.scroll-menu div.scroll-menu-tag {
+  display: inline-block;
+  border-radius: 5px;
+  margin-left: 7px;
+  margin-right: 7px;
+}
+
+div.scroll-menu.tag-pointer div.scroll-menu-tag:hover {
+  backdrop-filter: brightness(95%);
+  filter: brightness(95%);
+}
+
+.pointer {
+  cursor: pointer;
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Old versions of Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version */
+}
+.pointer.active {
+  text-emphasis: inherit;
+  border-bottom: solid 3px;
+}
+.pointer:hover {
+  backdrop-filter: brightness(95%);
+  filter: brightness(95%);
+}
+.text-pointer {
+  cursor: pointer;
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Old versions of Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version */
+}
+.text-pointer:hover {
+  font-variant-ligatures: historical-ligatures;
+  filter: brightness(95%);
+}
+
+.ad-grabbing {
+  background: rgba(255, 255, 255, 0.3);
+  cursor: grabbing;
+  cursor: -webkit-grabbing;
+  transform: scale(1);
+}
+
+.ad-box-date {
+  margin: auto;
+  font-size: 12px;
+  color: $ad-font-color;
+}
+.ad-box-t {
+  margin-bottom: 5px;
+  font-size: 16px;
+  font-weight: bold;
+  color: $ad-font-color;
+}
+
+.ad-box-bg {
+  background-image: linear-gradient(
+    to bottom,
+    $ad-btn-color 1%,
+    rgba(184, 227, 255, 0) 100%
+  );
+}
+
+.ad-fixed-card {
+  width: 236px;
+  border-radius: 7px;
+}
+
+.line1-position {
+  z-index: 10;
+  width: 3rem;
+  margin-top: 1.5rem;
+  margin-left: 0rem;
+  position: absolute;
+}
+.lineh-position {
+  z-index: 10;
+  margin-top: 5.7rem;
+  margin-left: -4.25rem;
+  width: 8.65rem;
+  height: 2px;
+  position: absolute;
+}
+.line2-position {
+  z-index: 10;
+  width: 1.2rem;
+  margin-left: 0rem;
+  margin-top: 10rem;
+  position: absolute;
+}
+.line1-position-rtl {
+  z-index: 10;
+  width: 3rem;
+  margin-top: 1.5rem;
+  margin-right: 0rem;
+  position: absolute;
+}
+.lineh-position-rtl {
+  z-index: 10;
+  margin-top: 5.7rem;
+  margin-right: -4.25rem;
+  width: 8.65rem;
+  height: 2px;
+  position: absolute;
+}
+.line2-position-rtl {
+  z-index: 10;
+  width: 1.2rem;
+  margin-right: 0rem;
+  margin-top: 10rem;
+  position: absolute;
+}
+.line {
+  height: 2px;
+  content: repeating-linear-gradient(90deg, $ad-btn-color 0 10px, #0000 0 14px);
+}
+.line90 {
+  height: 2px;
+  rotate: -90deg;
+  content: repeating-linear-gradient(90deg, $ad-btn-color 0 10px, #0000 0 14px);
+}
+
+.main-line1-position {
+  z-index: 10;
+  width: 3rem;
+  margin-top: 1.5rem;
+  margin-left: 0rem;
+  position: absolute;
+}
+
+.main-line1-position-rtl {
+  z-index: 10;
+  width: 3rem;
+  margin-top: 1.5rem;
+  margin-right: 0rem;
+  position: absolute;
+}
+
+.main-line {
+  height: 2px;
+  content: repeating-linear-gradient(90deg, $ad-btn-color 0 10px, #0000 0 14px);
+}
+
+.sub-line1-position {
+  z-index: 10;
+  width: 2rem;
+  margin-top: 1.1rem;
+  margin-left: -0.8rem;
+  position: absolute;
+}
+.sub-line1-position-rtl {
+  z-index: 10;
+  width: 2rem;
+  margin-top: 1.1rem;
+  margin-right: -0.8rem;
+  position: absolute;
+}
+
+.sub-line90 {
+  height: 5px;
+  rotate: -90deg;
+  content: repeating-linear-gradient(90deg, $ad-btn-color 0 10px, #0000 0 10px);
+}
+
+hr.line-style-one {
+  border: 0;
+  height: 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+hr.line-style-two {
+  border: 0;
+  height: 1px;
+  background: #333;
+  background-image: linear-gradient(to right, #ccc, #333, #ccc);
+}
