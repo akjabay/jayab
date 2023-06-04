@@ -25,6 +25,16 @@
             </span>
           </a>
         </q-btn>
+        <q-btn
+            v-if="isUserLoggedIn && (user.id == loadedUser.id || user.is_superuser == 1)"
+            @click="onCopy"
+            class="q-ma-xs q-px-md ad-font-color"
+            outline
+            rounded
+          >
+            <span class="q-px-xs"><q-icon name="fa fa-copy" /></span>
+            {{ $t('copyProfileURL') }}
+          </q-btn>
       </div>
 
 
@@ -34,7 +44,7 @@
       >
         <div>
           <q-btn
-            :to="'/accounts/profile/setting/' + loadedUser.id"
+            :to="'/accounts/profile/setting/' + loadedUser.username"
             class="q-mx-xs q-px-md"
             outline
             rounded
@@ -44,7 +54,7 @@
           </q-btn>
           <q-btn
             v-if="isRealStateOwner"
-            @click="() => $router.push('/products/manage-map')"
+            @click="() => $router.push('/accounts/plus')"
             class="q-mx-xs q-px-md"
             outline
             rounded
@@ -129,6 +139,14 @@ export default defineComponent({
   },
 
   methods: {
+    onCopy () {
+      navigator.clipboard.writeText(window.location.href);
+      this.$q.notify({
+        type: "positive",
+        message: this.$t("success"),
+        caption: this.$t("copyProfileURL"),
+      });
+    },
     async onChangePage(page) {
       await this.fetchData({ page });
       this.currentPage = page;
@@ -139,8 +157,8 @@ export default defineComponent({
         if (page) {
           this.pagination.offset = (page - 1) * this.pagination.limit;
         }
-        const userId = this.$route.params.userId;
-        if (!userId || userId === this.user.id) {
+        const username = this.$route.params.userId;
+        if (username === this.user.username) {
           
           const result = await api.product.productFindMyProducts({
             limit: this.pagination.limit,
@@ -157,7 +175,7 @@ export default defineComponent({
         } else {
 
           const result = await api.product.productFindUserProducts({
-            userId,
+            userId: this.user.id,
             limit: this.pagination.limit,
             offset: this.pagination.offset,
             sorting: 'cteaedAt: -1',

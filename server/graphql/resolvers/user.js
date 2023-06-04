@@ -1,7 +1,7 @@
 const db = require("../../models/index");
 const bcrypt = require("bcrypt");
 const cities = require('../../data/city.json');
-const { decrypt } = require("../../middlewares/encryption");
+const { decrypt, encrypt } = require("../../middlewares/encryption");
 
 module.exports = {
     userCreate: async (args, req) => {
@@ -56,6 +56,8 @@ module.exports = {
         if (input.cityId) {
             input.city = cities.find((c) => c.id === input.cityId)
         }
+
+        input.phone ? input.phone = encrypt(input.phone) : '';
 
         if (errors.length > 0) {
             const error = new Error("Invalid input.");
@@ -209,9 +211,12 @@ module.exports = {
         if (user.subscriptions && user.subscriptions.length > 0) {
     
             const activeSubIdx = user.subscriptions.findIndex((us) => {
-                return us.planId === plan.id &&
-                us.serviceId === service.id &&
-                new Date(us.expiresAt).getTime < new Date().getTime()
+                return us.planId.toString() === plan.id.toString() &&
+                    us.serviceId.toString() === service.id.toString() &&
+                    (
+                        new Date(us.expiresAt).getTime() > new Date().getTime() ||
+                        !us.expiresAt
+                    )
             });
 
             if (activeSubIdx > -1) {
@@ -219,7 +224,6 @@ module.exports = {
                     message: "service is active now",
                 });
             }
-
         }
 
         if (errors.length > 0) {
@@ -229,17 +233,30 @@ module.exports = {
             throw error;
         }
 
+        const params = {};
+        if (plan.price[input.duration] === 0) {
+            params.status = 'active';
+            const times = {
+                month: 30 * 24 * 60 * 60 * 1000,
+                quarter: 3 * 30 * 24 * 60 * 60 * 1000,
+                year: 12 * 30 * 24 * 60 * 60 * 1000,
+            }
+            params.expiresAt = new Date().getTime() + times[input.duration] + plan.trialDays * 24 * 60 * 60 * 1000;
+        }
+
         const updatedUser = await db["User"].findByIdAndUpdate(user.id, {
-            subscriptions: {
-                $push: {
+            $push: {
+                subscriptions: {
                     serviceId: service.id,
                     planId: plan.id,
                     duration: input.duration,
+                    ...params
                 }
             }
-        }).populate('subscriptions.planId subscriptions.serviceId').exec();
+        }, { new: true })
+        .populate('subscriptions.planId subscriptions.serviceId')
+        .exec();
 
-        console.log(updatedUser, 'updatedUser')
         return updatedUser;
     },
     // cart

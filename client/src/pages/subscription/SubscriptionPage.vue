@@ -3,8 +3,12 @@
     <main-title-comp :title="$t('plusSubscription')"></main-title-comp>
     <sub-title-comp :title="$t('services')"></sub-title-comp>
 
-    <div v-for="(service, i) in services" :key="i">
-      <q-card flat class="q-ma-sm ad-fixed-card ad-box-bordered">
+    <div class="">
+      <q-card
+        v-for="(service, i) in services" :key="i"
+        flat
+        class="col-12 col-md-4 col-sm-6 col-xs-12 q-ma-sm q-pa-sm ad-box-bordered"
+      >
         <q-card-section>
           {{ service.persian_codename }}
         </q-card-section>
@@ -12,7 +16,7 @@
           {{ '✅ ' + access }}
         </q-card-section>
         <q-card-actions :align="($t('direction') === 'rtl' ? 'right' : 'left')">
-           <q-btn @click="onActivate({ id: service.id })" class="ad-primary-btn" :label="$t('activate')" />
+            <q-btn @click="onActivate({ id: service.id })" class="ad-primary-btn" :label="$t('activate')" />
         </q-card-actions>
       </q-card>
     </div>

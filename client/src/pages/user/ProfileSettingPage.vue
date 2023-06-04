@@ -1,12 +1,12 @@
 <template>
-  <div class="">
+  <q-page class="">
     <main-title-comp :title="$t('editUser')"></main-title-comp>
     <sub-title-comp :title="$t('settings')"></sub-title-comp>
     <dark-comp></dark-comp>
     <sub-title-comp :title="$t('edit')"></sub-title-comp>
 
     <user-edit-comp></user-edit-comp>
-  </div>
+  </q-page>
 </template>
 
 <script>

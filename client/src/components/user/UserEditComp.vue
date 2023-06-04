@@ -77,7 +77,11 @@
             v-model="editingUser.username"
             :rules="[rules.min3]"
             :label="$t('inputUsername')"
-          ></q-input>
+          >
+          <template v-slot:hint>
+            {{ editingUser.usernameHint }}
+          </template>
+        </q-input>
         </div>
         <div class="col-12 col-md-6 col-sm-6 col-xs-10 q-px-md text-center">
           <q-input
@@ -244,6 +248,7 @@ export default defineComponent({
       editingUser: ref({
         name: "",
         username: "",
+        usernameHint: "",
         address: "",
         commissionPercentage: "",
         commissionLimit: "",
@@ -264,6 +269,11 @@ export default defineComponent({
   computed: {
     ...mapState(useAuthStore, ["user"]),
   },
+  watch: {
+    'editingUser.username': function () {
+      this.checkUsername();
+    }
+  },
 
   methods: {
     ...mapActions(useAuthStore, ["setUser", "setToken"]),
@@ -282,8 +292,8 @@ export default defineComponent({
         ) {
           return this.$q.notify({
             type: "negative",
-            message: "failed",
-            caption: "failed",
+            message: this.$t("failed"),
+            caption: this.$t("failed"),
           });
         }
         const result = await api.auth.authUpdate({
@@ -300,22 +310,22 @@ export default defineComponent({
         if (result.data.errors) {
           this.$q.notify({
             type: "negative",
-            message: "failed",
-            caption: "failed",
+            message: this.$t("failed"),
+            caption: this.$t("failed"),
           });
         } else if (result.data.data.authUpdate.id) {
           this.editingUser = result.data.data.authUpdate;
           this.setUser(this.editingUser);
           this.$q.notify({
             type: "positive",
-            message: "success",
-            caption: "success",
+            message: this.$t("success"),
+            caption: this.$t("success"),
           });
         } else {
           this.$q.notify({
             type: "negative",
-            message: "failed",
-            caption: "failed",
+            message: this.$t("failed"),
+            caption: this.$t("failed"),
           });
         }
       } catch (error) {
@@ -323,11 +333,36 @@ export default defineComponent({
         this.loading = false;
         this.$q.notify({
           type: "negative",
-          message: "failed",
-          caption: "failed",
+          message: this.$t("failed"),
+          caption: this.$t("failed"),
         });
       }
       this.loading = false;
+    },
+    checkUsername: async function () {
+      try {
+        this.editingUser.usernameHint = "";
+        const result = await api.auth.authCheckUsername({ username: this.editingUser.username });
+        if (result.data.errors) {
+          this.$q.notify({
+            type: "negative",
+            message: this.$t("failed"),
+            caption: this.$t("failed"),
+          });
+        } else if (result.data.data.authCheckUsername === true) {
+          this.editingUser.usernameHint = "نام کاربری تکراری است";
+        } else if (result.data.data.authCheckUsername === false) {
+          this.editingUser.usernameHint = "نام کاربری مورد تایید است";
+        }
+      } catch (error) {
+        const err = new Error(error);
+        console.log(err);
+        this.$q.notify({
+          type: "negative",
+          message: this.$t("failed"),
+          caption: this.$t("failed"),
+        });
+      }
     },
     async fetchData() {
       try {
@@ -336,7 +371,7 @@ export default defineComponent({
         if (result.data.errors) {
           this.$q.notify({
             type: "warning",
-            message: "failed",
+            message: this.$t("failed"),
             caption: result.data.errors[0],
           });
         } else if (result.data.data.authFindMe) {
@@ -357,18 +392,18 @@ export default defineComponent({
         console.log(err);
         this.$q.notify({
           type: "negative",
-          message: "failed",
-          caption: "failed",
+          message: this.$t("failed"),
+          caption: this.$t("failed"),
         });
       }
     },
   },
   mounted() {
     this.rules = {
-      required: (v) => !!v || "required",
-      min3: (v) => !v || v.length >= 3 || "min3Character",
-      min8: (v) => !v || v.length >= 8 || "min8Character",
-      email: (v, rules) => rules.email(v) || "havetoBeValidEmail",
+      required: (v) => !!v || this.$t("required"),
+      min3: (v) => !v || v.length >= 3 || this.$t("min3Character"),
+      min8: (v) => !v || v.length >= 8 || this.$t("min8Character"),
+      email: (v, rules) => rules.email(v) || this.$t("havetoBeValidEmail"),
     };
     this.fetchData();
   },

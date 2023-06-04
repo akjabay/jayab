@@ -1,91 +1,93 @@
 <template>
-  <div class="row justify-center text-center q-mt-xl">
-    <div class="col-12 col-md-4 col-sm-6 text-center">
-      <main-title-comp :title="$t('passwordReset')"></main-title-comp>
-      <div v-if="form1" class="q-py-sm q-mx-sm">
-        <div class="col-12 text-center">
-          <q-input
-            required
-            outlined
-            class="q-mt-sm"
-            v-model="email"
-            :rules="[rules.required, rules.email]"
-            :label="$t('inputEmail')"
-          ></q-input>
-
-          <q-btn
-            :loading="loading"
-            @click="onSubmit"
-            class="full-width q-mt-sm ad-primary-btn"
-          >
-            {{ $t('submit') }}
-          </q-btn>
-        </div>
-      </div>
-
-      <q-card v-else-if="form2" bordered class="q-pa-sm q-mx-sm" flat>
-        <div class="col-12 text-center">
-          <div class="text-h5 text-center q-pa-sm q-mb-sm">
-            {{ $t('verifyCodeAndReset') }}
+  <q-page>
+    <div class="row justify-center text-center q-mt-xl">
+      <div class="col-12 col-md-4 col-sm-6 text-center">
+        <main-title-comp :title="$t('passwordReset')"></main-title-comp>
+        <div v-if="form1" class="q-py-sm q-mx-sm">
+          <div class="col-12 text-center">
+            <q-input
+              required
+              outlined
+              class="q-mt-sm"
+              v-model="email"
+              :rules="[rules.required, rules.email]"
+              :label="$t('inputEmail')"
+            ></q-input>
+  
+            <q-btn
+              :loading="loading"
+              @click="onSubmit"
+              class="full-width q-mt-sm ad-primary-btn"
+            >
+              {{ $t('submit') }}
+            </q-btn>
           </div>
-          <q-input
-            outlined
-            class="q-mt-sm"
-            v-model="code"
-            :rules="[rules.required]"
-            :label="$t('inputVerificationCode')"
-          ></q-input>
-          <q-input
-            outlined
-            class="q-mt-sm"
-            v-model="password"
-            :rules="[rules.required, rules.min8]"
-            type="password"
-            :label="$t('inputPassword')"
-          ></q-input>
-          <q-input
-            outlined
-            class="q-mt-sm"
-            v-model="confirmPassword"
-            :rules="[rules.required, rules.min8]"
-            type="password"
-            :label="$t('inputConfirmPassword')"
-          ></q-input>
-
-          <q-btn @click="codeVerify" class="full-width q-mt-sm ad-primary-btn">
-            {{ $t('submit') }}
-          </q-btn>
         </div>
+  
+        <q-card v-else-if="form2" bordered class="q-pa-sm q-mx-sm" flat>
+          <div class="col-12 text-center">
+            <div class="text-h5 text-center q-pa-sm q-mb-sm">
+              {{ $t('verifyCodeAndReset') }}
+            </div>
+            <q-input
+              outlined
+              class="q-mt-sm"
+              v-model="code"
+              :rules="[rules.required]"
+              :label="$t('inputVerificationCode')"
+            ></q-input>
+            <q-input
+              outlined
+              class="q-mt-sm"
+              v-model="password"
+              :rules="[rules.required, rules.min8]"
+              type="password"
+              :label="$t('inputPassword')"
+            ></q-input>
+            <q-input
+              outlined
+              class="q-mt-sm"
+              v-model="confirmPassword"
+              :rules="[rules.required, rules.min8]"
+              type="password"
+              :label="$t('inputConfirmPassword')"
+            ></q-input>
+  
+            <q-btn @click="codeVerify" class="full-width q-mt-sm ad-primary-btn">
+              {{ $t('submit') }}
+            </q-btn>
+          </div>
+          <q-card bordered class="q-pa-sm q-ma-sm" flat>
+            <span>{{ $t('didnotRecieveCode') }}</span>
+            <q-btn
+              no-caps
+              dense
+              flat
+              :disable="disable"
+              :loading="loading"
+              class="q-mx-xs"
+              color="primary"
+              @click="onSubmit, (disable = true)"
+              >{{ $t('tryAgain') }}</q-btn
+            >
+          </q-card>
+        </q-card>
+  
         <q-card bordered class="q-pa-sm q-ma-sm" flat>
-          <span>{{ $t('didnotRecieveCode') }}</span>
+          <span>{{ $t('dontHaveAnAccount') }}</span>
           <q-btn
             no-caps
             dense
             flat
-            :disable="disable"
-            :loading="loading"
             class="q-mx-xs"
             color="primary"
-            @click="onSubmit, (disable = true)"
-            >{{ $t('tryAgain') }}</q-btn
+            @click="$router.push('/accounts/signup')"
+            >{{ $t('signup') }}</q-btn
           >
         </q-card>
-      </q-card>
-
-      <q-card bordered class="q-pa-sm q-ma-sm" flat>
-        <span>{{ $t('dontHaveAnAccount') }}</span>
-        <q-btn
-          no-caps
-          dense
-          flat
-          class="q-mx-xs"
-          color="primary"
-          @click="$router.push('/accounts/signup')"
-          >{{ $t('signup') }}</q-btn
-        >
-      </q-card>
+      </div>
     </div>
-  </div>
+  </q-page>
 </template>
 
 <script>
@@ -125,8 +127,8 @@ export default defineComponent({
           this.loading = false;
           return this.$q.notify({
             type: "warning",
-            message: "failed",
-            caption: "fillRequiredFields",
+            message: this.$t("failed"),
+            caption: this.$t("fillRequiredFields"),
           });
         }
         const result = await api.auth.authResetPassword({
@@ -135,8 +137,8 @@ export default defineComponent({
         if (result.data.errors) {
           this.$q.notify({
             type: "negative",
-            message: "failed",
-            caption: "failed",
+            message: this.$t("failed"),
+            caption: this.$t("failed"),
           });
         } else if (result.data.data.authResetPassword.id) {
           this.user = result.data.data.authResetPassword;
@@ -144,14 +146,14 @@ export default defineComponent({
           this.form2 = true;
           this.$q.notify({
             type: "positive",
-            message: "success",
-            caption: "successRegister",
+            message: this.$t("success"),
+            caption: this.$t("successRegister"),
           });
         } else {
           this.$q.notify({
             type: "negative",
-            message: "failed",
-            caption: "failed",
+            message: this.$t("failed"),
+            caption: this.$t("failed"),
           });
         }
       } catch (error) {
@@ -159,8 +161,8 @@ export default defineComponent({
         console.log(error, "error on fecth data");
         this.$q.notify({
           type: "negative",
-          message: "failed",
-          caption: "failed",
+          message: this.$t("failed"),
+          caption: this.$t("failed"),
         });
       }
       this.loading = false;
@@ -172,8 +174,8 @@ export default defineComponent({
         if (this.password != this.confirmPassword) {
           return this.$q.notify({
             type: "negative",
-            message: "failed",
-            caption: "passwordsAreNotMatch",
+            message: this.$t("failed"),
+            caption: this.$t("passwordsAreNotMatch"),
           });
         }
         const result = await api.auth.authResetPasswordVerify({
@@ -184,14 +186,14 @@ export default defineComponent({
         if (result.data.errors) {
           this.$q.notify({
             type: "negative",
-            message: "failed",
-            caption: "failed",
+            message: this.$t("failed"),
+            caption: this.$t("failed"),
           });
         } else if (result.data.data.authResetPasswordVerify.id) {
           this.$q.notify({
             type: "positive",
-            message: "success",
-            caption: "successResetPassword",
+            message: this.$t("success"),
+            caption: this.$t("successResetPassword"),
           });
           this.$router.push({
             path: "/accounts/login",
@@ -199,8 +201,8 @@ export default defineComponent({
         } else {
           this.$q.notify({
             type: "negative",
-            message: "failed",
-            caption: "failed",
+            message: this.$t("failed"),
+            caption: this.$t("failed"),
           });
         }
       } catch (error) {
@@ -208,8 +210,8 @@ export default defineComponent({
         this.loading = false;
         this.$q.notify({
           type: "negative",
-          message: "failed",
-          caption: "failed",
+          message: this.$t("failed"),
+          caption: this.$t("failed"),
         });
       }
       this.loading = false;

@@ -4,6 +4,9 @@ const bcrypt = require("bcrypt");
 const { SECRET_KEY } = process.env;
 const { encrypt, decrypt } = require("../../middlewares/encryption.js");
 const cities = require('../../data/city.json');
+const { subscriptionsToPermissions } = require('../../middlewares/authMiddleware.js');
+const { sendMail } = require("../../middlewares/mail.js");
+
 
 module.exports = {
     authSignup: async (args, req) => {
@@ -30,13 +33,13 @@ module.exports = {
             : email.split('@')[0] + email.split('@')[1].slice(0, 1);
 
         // validation code for email or phone
-        const code = 12345;
-        // const code = Math.floor(Math.random() * 90000) + 10000;
+        // const code = 12345;
+        const code = Math.floor(Math.random() * 90000) + 10000;
         const params = {
             code: code,
             name: name,
             username: username,
-            email: email,
+            email: email.toLocaleLowerCase(),
             phone: encrypt(phone),
             address: address,
             password: password,
@@ -54,6 +57,16 @@ module.exports = {
             params.password = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
 
             //send code via sms or email
+            const res = await sendMail({ email, subject: 'Verification Code AvanDaneh.com', text: `${code}` });
+            if (!res.success) {
+                errors.push({
+                    message: "email not sent!",
+                });
+                const error = new Error("email not sent!");
+                error.data = errors;
+                error.code = 422;
+                throw error;
+            }
 
             return await db["User"].findByIdAndUpdate(exUser.id, params, { new: true });
         } else if (exUser) {
@@ -139,7 +152,7 @@ module.exports = {
                 permissions: permissions.map((p) => p.id)
             },
             { new: true }
-        ).populate("permissions");
+        ).populate("permissions subscriptions.planId subscriptions.serviceId");
         updatedUser.phone = updatedUser.phone ? decrypt(updatedUser.phone) : updatedUser.phone;
         req.session.user = updatedUser;
 
@@ -157,14 +170,13 @@ module.exports = {
         };
         query.username ? (params.username = query.username) : null;
         query.phone ? (params.phone = encrypt(query.phone)) : null;
-        query.email ? (params.email = query.email) : null;
+        query.email ? (params.email = (query.email).toLocaleLowerCase()) : null;
         query.is_superuser ? (params.is_superuser = query.is_superuser) : null;
         const password = query.password;
         const errors = [];
 
-        // params.status_auth = 'active'
         let user = await db["User"].findOne(params)
-            .populate("permissions");
+            .populate("permissions subscriptions.planId subscriptions.serviceId");
         if (!user) {
             errors.push({
                 message: "user not founded!",
@@ -183,8 +195,22 @@ module.exports = {
                     expiresIn: 6000000,
                 }
             );
-            req.session.user = await db["User"].findOne(params)
-                .populate("permissions");
+
+            if (user && user.subscriptions.length > 0) {
+                const codenames = subscriptionsToPermissions(user);
+                if (codenames && codenames.length > 0) {
+                    const modifiedCodenames = codenames.filter((cn) => {
+                        const index = user.permissions.findIndex((up) => up.codename === cn);
+                        return index === -1;
+                    }).map((cn) => { return { codename: cn } });
+                    const subPermissions = await db["Permission"].find({
+                        $or: modifiedCodenames,
+                    });
+                    user.permissions = [...user.permissions, ...subPermissions];
+                }
+            }
+
+            req.session.user = user;
         } else {
             token = null;
             user = null;
@@ -197,7 +223,7 @@ module.exports = {
             throw error;
         }
 
-        user.phone = decrypt(user.phone);
+        user && user.phone ? user.phone = decrypt(user.phone) : '';
 
         return {
             user: user,
@@ -209,7 +235,8 @@ module.exports = {
         const creator = req.creator;
         const user = req.session.user;
         const input = args.input ? args.input : args;
-        const params = input.id ? { _id: input.id } : { username: input.username };
+        const params = {};
+        input.id && user.is_superuser === 1 ? (params._id = input.id, params.username = input.username) : params._id = creator;
         const errors = [];
 
         if (input.password) {
@@ -260,8 +287,8 @@ module.exports = {
 
         const updatedUser = await db["User"]
             .findOneAndUpdate(params, input, { new: true })
-            .populate("permissions");
-        updatedUser.phone = decrypt(updatedUser.phone);
+            .populate("permissions subscriptions.planId subscriptions.serviceId");
+        updatedUser.phone ? updatedUser.phone = decrypt(updatedUser.phone): '';
         return updatedUser;
     },
 
@@ -302,7 +329,24 @@ module.exports = {
             throw error;
         }
 
-        const updatedUser = await db["User"].findByIdAndUpdate(user.id, updateParams, { new: true }).populate("permissions");
+        const updatedUser = await db["User"].findByIdAndUpdate(user.id, updateParams, { new: true })
+            .populate("permissions subscriptions.planId subscriptions.serviceId");
+
+        if (updatedUser.subscriptions.length > 0) {
+            const codenames = subscriptionsToPermissions(updatedUser);
+            console.log(codenames, 'codenames')
+            if (codenames && codenames.length > 0) {
+                const modifiedCodenames = codenames.filter((cn) => {
+                    const index = updatedUser.permissions.findIndex((up) => up.codename === cn);
+                    return index === -1;
+                }).map((cn) => { return { codename: cn } })
+                const subPermissions = await db["Permission"].find({
+                    $or: modifiedCodenames,
+                });
+                updatedUser.permissions = [...updatedUser.permissions, ...subPermissions];
+            }
+        }
+
         updatedUser.phone = updatedUser.phone ? decrypt(updatedUser.phone) : updatedUser.phone;
         req.session.user = updatedUser;
 
@@ -316,7 +360,7 @@ module.exports = {
         const errors = [];
 
         const user = await db["User"].findOne(params)
-            .populate("permissions");
+            .populate("permissions subscriptions.planId subscriptions.serviceId");
         if (!user) {
             errors.push({
                 message: "user not founded!",
@@ -324,9 +368,18 @@ module.exports = {
         }
 
         // validation code for email or phone
-        const code = 12345;
-        // const code = Math.floor(Math.random() * 90000) + 10000;
+        const code = Math.floor(Math.random() * 90000) + 10000;
         //send code via sms or email
+        const res = await sendMail({ email: user.email, subject: 'Verification Code AvanDaneh.com', text: `${code}` });
+        if (!res.success) {
+            errors.push({
+                message: "email not sent!",
+            });
+            const error = new Error("email not sent!");
+            error.data = errors;
+            error.code = 422;
+            throw error;
+        }
 
         const dbUser = await db["User"].findByIdAndUpdate(user.id, { code }, { new: true })
             .select('-password').exec();
@@ -406,10 +459,24 @@ module.exports = {
         const creator = req.creator;
         const user = await db["User"]
             .findById(creator)
-            .populate("permissions")
+            .populate("permissions subscriptions.planId subscriptions.serviceId")
             .exec();
 
         user.phone = user.phone ? decrypt(user.phone) : user.phone;
+        if (user.subscriptions.length > 0) {
+            const codenames = subscriptionsToPermissions(user);
+            if (codenames && codenames.length > 0) {
+                const modifiedCodenames = codenames.filter((cn) => {
+                    const index = user.permissions.findIndex((up) => up.codename === cn);
+                    return index === -1;
+                }).map((cn) => { return { codename: cn } });
+                const subPermissions = await db["Permission"].find({
+                    $or: modifiedCodenames,
+                });
+                user.permissions = [...user.permissions, ...subPermissions];
+            }
+        }
+
         return user;
     },
 };

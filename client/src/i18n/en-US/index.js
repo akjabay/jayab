@@ -17,7 +17,6 @@ export default {
   map: 'map',
   list: 'list',
   blog: 'blog',
-  products: 'products',
   aboutUs: 'about us',
   tickets: 'tickets',
   profile: 'Profile',
@@ -57,6 +56,9 @@ export default {
   yourOrderHasSubmittedWeWillCallYouSoon: 'your order has submitted. we will call you soon.',
   search: 'search',
   publicMode: 'public mode',
+  setCityIsRequired: 'setCityIsRequired',
+  informationIsWrong: 'informationIsWrong',
+  copyProfileURL: 'copyProfileURL',
 
   emptyList: 'Nothing is Here!',
 
@@ -131,6 +133,7 @@ export default {
 
   products: 'products',
   productsTitle: 'Products',
+  publicProducts: 'Public Products',
   newProductsTitle: "New Products",
   trendingProductsTitle: "Trending Products",
 

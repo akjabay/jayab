@@ -142,11 +142,7 @@ export default defineComponent({
     async onShare() {
       if (this.item) {
         this.loading.share = true;
-        const url = this.item.deadline_date
-          ? "https://avandaneh.com" + "/products/" + this.item.pid
-          : (this.item.answereIds
-            ? "https://avandaneh.com" + "/tickets/" + this.item.pid
-            : "https://avandaneh.com" + "/blog/" + this.item.pid);
+        const url = window.location.href;
         await navigator.share({ title: this.item.title, url });
         this.loading.share = false;
       }

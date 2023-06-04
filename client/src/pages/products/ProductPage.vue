@@ -1,6 +1,6 @@
 <template>
   <q-page>
-    <ProductMain :product="product"></ProductMain>
+    <ProductMain v-if="loaded" :product="product"></ProductMain>
     <q-inner-loading :showing="!loaded" />
   </q-page>
 </template>

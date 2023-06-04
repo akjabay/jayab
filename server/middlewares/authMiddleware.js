@@ -1,8 +1,8 @@
 module.exports = {
     hasPermission: function (perm, user) {
         if (!user) return false;
-        for (item in user.permissions) {
-            if (user.permissions[item].codename == perm) {
+        for (const index in user.permissions) {
+            if (user.permissions[index].codename == perm) {
                 return true;
             }
         }
@@ -18,9 +18,20 @@ module.exports = {
             return true;
         }
 
-        for (item in user.permissions) {
-            if (user.permissions[item].codename === perm) {
+        for (const index in user.permissions) {
+            if (user.permissions[index].codename === perm) {
                 return true;
+            }
+        }
+
+        // services and plans
+        for (const sub of user.subscriptions) {
+            const now = new Date().getTime();
+            if (sub.status === 'active' && +sub.expiresAt > now && sub.serviceId) {
+                if (sub.serviceId.accesses.includes(perm)) {
+                    console.log('now')
+                    return true;
+                }
             }
         }
 
@@ -33,4 +44,14 @@ module.exports = {
 
         return false;
     },
+    subscriptionsToPermissions: function (user) {
+        let codenames = [];
+        for (const sub of user.subscriptions) {
+            const now = new Date().getTime();
+            if (sub.status === 'active' && new Date(sub.expiresAt).getTime() > now && sub.serviceId && sub.serviceId.accesses) {
+                codenames = [...codenames, ...sub.serviceId.accesses.split(',')]
+            }
+        }
+        return codenames;
+    }
 };

@@ -140,6 +140,8 @@ module.exports = {
     },
 
     productFind: async (args, req) => {
+        const creator = req.creator;
+        const user = req.session.user;
         const query = args.query ? args.query : args;
         const params = query.id ? { _id: query.id } : { pid: query.pid };
 
@@ -147,9 +149,17 @@ module.exports = {
             .findOne(params)
             .populate("categoryId userId")
             .exec();
-        product.userId.phone = product.userId.phone ? decrypt(product.userId.phone) : product.userId.phone;
 
-        return product;
+        if (product) {
+            if ((user && user.is_superuser !== 1) && product.userId.id !== creator) {
+                product.ownerInfo = '';
+            }
+            product.userId.phone ? product.userId.phone = decrypt(product.userId.phone) : '';
+            
+            return product;
+        } else {
+            return null;
+        }
     },
 
     productFindAll: async (args, req) => {
@@ -173,7 +183,7 @@ module.exports = {
         query.price ? matchParams.price = query.price : '';
 
         // for only view publics
-        if (user.is_superuser !== 1) {
+        if (!user || (user && user.is_superuser !== 1)) {
             matchParams.isPublic = true;
         }
 
@@ -197,20 +207,20 @@ module.exports = {
                         $match: matchParams
                     }
                 ])
-                .lookup({
-                    from: "users",
-                    localField: "userId",
-                    foreignField: "_id",
-                    as: "userId",
-                })
-                .unwind('userId')
-                .lookup({
-                    from: "categories",
-                    localField: "categoryId",
-                    foreignField: "_id",
-                    as: "categoryId",
-                })
-                .unwind('categoryId')
+                // .lookup({
+                //     from: "users",
+                //     localField: "userId",
+                //     foreignField: "_id",
+                //     as: "userId",
+                // })
+                // .unwind('userId')
+                // .lookup({
+                //     from: "categories",
+                //     localField: "categoryId",
+                //     foreignField: "_id",
+                //     as: "categoryId",
+                // })
+                // .unwind('categoryId')
                 .exec();
 
             const slicedProducts = pagination.limit
@@ -271,7 +281,7 @@ module.exports = {
         query.userId ? params._id = query.userId : '';
 
         // for only view publics
-        if (user.is_superuser !== 1) {
+        if (!user || (user && user.is_superuser !== 1)) {
             productParams.isPublic = true;
         }
 
@@ -395,7 +405,6 @@ module.exports = {
                 .limit(pagination.limit)
                 .exec();
             
-            console.log(params, 'products')
             const total = await db["Product"]
                 .find({
                     userId: creator,

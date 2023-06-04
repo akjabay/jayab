@@ -17,15 +17,15 @@ const prmsnMw = (req, res, next) => {
     const reqRoute = queryRoot.match(/[a-z]+/g)[0];
 
     // routes that we dont need authentication
-    if (reqRoute == "auth") return next();
+    if (reqRoute === "auth") return next();
 
     // all permissions are read and write access to some routes
-    if (queryType == "query") {
-        if (reqRoute == "slide") return next();
-        if (reqRoute == "service") return next();
-        if (reqRoute == "product") return next();
-        if (reqRoute == "category") return next();
-        if (reqRoute == "user") return next();
+    if (queryType === "query") {
+        if (reqRoute === "slide") return next();
+        if (reqRoute === "service") return next();
+        if (reqRoute === "product") return next();
+        if (reqRoute === "category") return next();
+        if (reqRoute === "user") return next();
         if (authMw.isSuperUserOrhasPermission(`read ${reqRoute}`, user)) {
             next();
         } else {
@@ -37,11 +37,12 @@ const prmsnMw = (req, res, next) => {
                 ],
             });
         }
-    } else if (queryType == "mutation") {
-        if (queryRoot == "userAddToLikes") return next();
-        if (queryRoot == "userRemoveFromLikes") return next();
-        if (queryRoot == "userFindMyLikes") return next();
-        if (queryRoot == "commentCreate") return next();
+    } else if (queryType === "mutation") {
+        if (queryRoot === "userActivateService") return next();
+        if (queryRoot === "userAddToLikes") return next();
+        if (queryRoot === "userRemoveFromLikes") return next();
+        if (queryRoot === "userFindMyLikes") return next();
+        if (queryRoot === "commentCreate") return next();
         if (authMw.isSuperUserOrhasPermission(`write ${reqRoute}`, user)) {
             next();
         } else {

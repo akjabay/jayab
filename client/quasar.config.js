@@ -67,7 +67,7 @@ module.exports = configure(function (/* ctx */) {
 
       // rebuildCache: true, // rebuilds Vite/linter/etc cache on startup
 
-      publicPath: process.env.NODE_ENV === "production" ? "/dist/spa/" : "/dist/spa/",
+      // publicPath: process.env.NODE_ENV === "production" ? "/dist/spa/" : "/dist/spa/",
       // analyze: true,
       // env: {},
       // rawDefine: {}
@@ -133,7 +133,7 @@ module.exports = configure(function (/* ctx */) {
       // extendSSRWebserverConf (esbuildConf) {},
       // extendPackageJson (json) {},
 
-      pwa: false,
+      pwa: true,
 
       // manualStoreHydration: true,
       // manualPostHydrationTrigger: true,

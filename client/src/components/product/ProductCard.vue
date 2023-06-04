@@ -12,7 +12,7 @@
       class="text-pointer"
       @click="$router.push('/products/' + product.pid)"
       style="width: 236px; max-height: 177px;"
-      src="/src/assets/images/no-image.svg"
+      src="no-image.svg"
     />
 
     <q-card-section class="">

@@ -3,21 +3,21 @@ const bcrypt = require("bcrypt");
 
 const permissions = [
 
-    { codename: 'write user', persian_codename: 'افزودن کاربر' },
-    { codename: 'read user', persian_codename: 'خواندن کاربر' },
-    { codename: 'write product', persian_codename: 'افزودن محصول' },
-    { codename: 'read product', persian_codename: 'خواندن محصول' },
-    { codename: 'write post', persian_codename: 'افزودن پست' },
-    { codename: 'read post', persian_codename: 'خواندن پست' },
-    { codename: 'write ticket', persian_codename: 'افزودن پرسش' },
-    { codename: 'read ticket', persian_codename: 'خواندن پرسش' },
-    { codename: 'write slide', persian_codename: 'افزودن اسلاید' },
-    { codename: 'read slide', persian_codename: 'خواندن اسلاید' },
-    { codename: 'write category', persian_codename: 'افزودن دسته بندی' },
-    { codename: 'read category', persian_codename: 'خواندن دسته بندی' },
-    { codename: 'write comment', persian_codename: 'افزودن نظر' },
-    { codename: 'read comment', persian_codename: 'خواندن نظر' },
-    { codename: 'read report', persian_codename: 'گزارش ها' },
+    { id: "6469e9d6c690c000825b94ba", codename: 'write user', persian_codename: 'افزودن کاربر' },
+    { id: "6469e9d6c690c000825b92b0", codename: 'read user', persian_codename: 'خواندن کاربر' },
+    { id: "6469e9d6c690c000825b95ba", codename: 'write product', persian_codename: 'افزودن محصول' },
+    { id: "6469e9d6c690c000825b92b2", codename: 'read product', persian_codename: 'خواندن محصول' },
+    { id: "6469e9d6c690c000825b96ba", codename: 'write post', persian_codename: 'افزودن پست' },
+    { id: "6469e9d6c690c000825b92b4", codename: 'read post', persian_codename: 'خواندن پست' },
+    { id: "6469e9d6c690c000825b97ba", codename: 'write ticket', persian_codename: 'افزودن پرسش' },
+    { id: "6469e9d6c690c000825b92b6", codename: 'read ticket', persian_codename: 'خواندن پرسش' },
+    { id: "6469e9d6c690c000825b98ba", codename: 'write slide', persian_codename: 'افزودن اسلاید' },
+    { id: "6469e9d6c690c000825b92b8", codename: 'read slide', persian_codename: 'خواندن اسلاید' },
+    { id: "6469e9d6c690c000825b93ba", codename: 'write category', persian_codename: 'افزودن دسته بندی' },
+    { id: "6469e9d6c690c000825b92ba", codename: 'read category', persian_codename: 'خواندن دسته بندی' },
+    { id: "6469e9d6c690c000825b92bb", codename: 'write comment', persian_codename: 'افزودن نظر' },
+    { id: "6469e9d6c690c000825b92bc", codename: 'read comment', persian_codename: 'خواندن نظر' },
+    { id: "6469e9d6c690c000825b92bd", codename: 'read report', persian_codename: 'گزارش ها' },
 
 ];
 
@@ -57,7 +57,7 @@ const categories = [
         name: "residential-rent",
         en_name: "residential rent",
         fa_name: "اجاره مسکونی",
-        icon_url: "mdi-home-circle-outline",
+        icon_url: "fa fa-key",
         full_fa_name: ""
     },
     {
@@ -84,7 +84,7 @@ const categories = [
         name: "partnership",
         en_name: "partnership",
         fa_name: "مشارکت در ساخت",
-        icon_url: "fa fa-key-skeleton",
+        icon_url: "fa fa-key",
         full_fa_name: ""
     },
     {
@@ -102,7 +102,7 @@ const categories = [
         name: "commercial-rent",
         en_name: "commercial rent",
         fa_name: "اجاره اداری و تجاری",
-        icon_url: "mdi-home-circle-outline",
+        icon_url: "fa fa-key",
         full_fa_name: ""
     },
     {
@@ -111,7 +111,7 @@ const categories = [
         name: "temporary-rent",
         en_name: "temporary rent",
         fa_name: "اجاره کوتاه مدت",
-        icon_url: "fa fa-house-person-return",
+        icon_url: "fa fa-key",
         full_fa_name: ""
     },
     {
@@ -120,22 +120,24 @@ const categories = [
         name: "real-estate",
         en_name: "real estate",
         fa_name: "پروژه های ساخت و ساز",
-        icon_url: "fa fa-house-building",
+        icon_url: "fa fa-key",
         full_fa_name: ""
     }
 ]
 
 const services = [
     {
+        id: "646b84fef37028cf327a458b",
         codename : 'plus',
         persian_codename : 'پلاس',
-        accesses: 'search,manage,dashboard',
+        accesses: 'write product',
         persian_accesses: 'جستجو,مدیریت,داشبورد',
     }
 ];
 
 const plans = [
     {
+        id: "646b2ea42a5a12ef997229a1",
         name: 'اشتراک طلایی',
         description: 'فعال سازی طلایی سرویس',
         featureDescriptions: 'فعال سازی طلایی سرویس',
@@ -152,13 +154,32 @@ const plans = [
         },
         trialDays: 30,
         metadata: {},
-    }
+    },
+    {
+        id: "646b2ea42a5a12ef997229a2",
+        name: 'اشتراک نقره ای',
+        description: 'فعال سازی نقره ای سرویس',
+        featureDescriptions: 'فعال سازی نقره ای سرویس',
+        tags: 'نقره ای',
+        position: 1,
+        isAvailable: true,
+        allowMultiple: false,
+        price: {
+            month: 0,
+            quarter: 3 * 0 * 0.9,
+            year:  12 * 0 * 0.8,
+            once: 1,
+            currency: 'toman'
+        },
+        trialDays: 30,
+        metadata: {},
+    },
 ];
 
 const users = [
     {
         name: 'asm',
-        phone: '00000000000',
+        phone: 'OTkwZTQ1MGNhN2JkMDdiNjJiN2EyMjUzNGRiNjUyNjU=',
         email: 'asemhs@gmail.com',
         password: 'asm1470',
         username: 'asm',
@@ -174,19 +195,19 @@ module.exports.run = async () => {
         await db["Permission"].insertMany(permissions);
     }
     if (dbUsers.length === 0) {
-        const permissions = await db["Permission"].find();
+        const dbPermissions = await db["Permission"].find();
         users.forEach((u) => {
             u.password = bcrypt.hashSync(u.password, bcrypt.genSaltSync(10));
-            u.permissions = permissions.map((p) => p.id);
+            u.permissions = dbPermissions.map((p) => p.id);
             return u;
         })
         await db["User"].insertMany(users);
     }
     const dbCategories = await db["Category"].find();
-    if (dbCategories.length !== categories.length) {
+    // if (dbCategories.length !== categories.length) {
         await db["Category"].deleteMany();
         await db["Category"].insertMany(categories);
-    }
+    // }
     const dbServices = await db["Service"].find();
     if (dbServices.length !== services.length) {
         await db["Service"].deleteMany();

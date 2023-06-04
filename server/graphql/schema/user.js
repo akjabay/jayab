@@ -17,7 +17,6 @@ type User {
     transactions: [UserTransactionItem]
     avatar_url: String
     is_superuser: Float
-    password: String
     commissionExpire: String
     commissionLimit: Float
     commissionPercentage: Float

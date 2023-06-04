@@ -1,5 +1,4 @@
 const db = require("../../models/index");
-const { decrypt } = require("../../middlewares/encryption");
 
 module.exports = {
     categoryCreate: async (args, req) => {

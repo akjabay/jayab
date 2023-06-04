@@ -3,7 +3,7 @@
     <div class="ad-nothing-text">
       <q-icon size="lg" name="list" />
       <div class="text-bold">
-        {{ text ? text : "emptyList" }}
+        {{ text ? text : $t("emptyList") }}
       </div>
     </div>
   </div>

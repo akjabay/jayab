@@ -161,6 +161,11 @@ export default {
       latlng = '',
       maxDistance = '',
       isMap = false,
+      area = '',
+      pricePerMeter = '',
+      areaOfBuilding = '',
+      rooms = '',
+      price = '',
     } = args;
     return request.post("/graphql", {
       query: `query {
@@ -170,6 +175,11 @@ export default {
                 ${latlng ? `latlng: "${latlng}"` : ''}
                 ${isMap ? `isMap: ${isMap}` : ''}
                 ${maxDistance ? `maxDistance: "${maxDistance}"` : ''}
+                ${area ? `area: "${area}"` : ''}
+                ${pricePerMeter ? `pricePerMeter: "${pricePerMeter}"` : ''}
+                ${areaOfBuilding ? `areaOfBuilding: "${areaOfBuilding}"` : ''}
+                ${rooms ? `rooms: "${rooms}"` : ''}
+                ${price ? `price: "${price}"` : ''}
                 ${limit && offset ? `pagination: {
                   limit: ${limit}
                   offset: ${offset}

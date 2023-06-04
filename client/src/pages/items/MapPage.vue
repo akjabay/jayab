@@ -22,7 +22,7 @@
       </div>
     </div>
 
-    <map-comp ref="map" :liteMode="true" v-on:on-change-view="onChangeView"></map-comp>
+    <map-comp ref="mapComponent" :liteMode="true" v-on:on-change-view="onChangeView"></map-comp>
     <q-inner-loading :showing="!loaded" />
   </q-page>
 </template>
@@ -57,7 +57,6 @@ export default defineComponent({
   },
   methods: {
     onChangeView ({ maxDistance, center }) {
-      console.log({ maxDistance, center }, '{ maxDistance, center }')
       this.fetchData({ maxDistance, center })
     },
     onResetFilter () {
@@ -102,7 +101,7 @@ export default defineComponent({
           const products = result.data.data.productFindAll.hits;
           this.products = products;
           this.pagination = result.data.data.productFindAll.pagination;
-          this.$refs.map.onAddingMarker({ markers: this.products });
+          this.$refs.mapComponent.onAddingMarker({ markers: this.products });
           
           if (!center) {
             const latlng = this.user && this.user.city ? this.user.city.lat_long : '';
@@ -111,7 +110,7 @@ export default defineComponent({
               longitude: latlng.split(',')[1]
             }: {};
 
-            this.$refs.map.setCurrentPositionMap({ location });
+            this.$refs.mapComponent.setCurrentPositionMap({ location });
           }
         }
 
@@ -128,7 +127,9 @@ export default defineComponent({
     },
   },
   mounted () {
-    this.fetchData();
+    // this.$nextTick(function () {
+      this.fetchData();
+    // });
   },
   computed: {
     ...mapState(useAuthStore, ["user"]),

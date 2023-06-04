@@ -1,6 +1,6 @@
 <template>
   <div v-if="user" class="">
-    <div @click="$router.push('/accounts/profile/' + user.id)">
+    <div @click="$router.push('/accounts/profile/' + user.username)">
       <span class="pointer text-center">
         <q-avatar size="50px" v-if="user.avatar_url">
           <image-comp :link="user.avatar_url" size="50px" :isThumb="true"></image-comp>

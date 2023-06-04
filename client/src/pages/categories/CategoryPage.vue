@@ -3,7 +3,7 @@
     <main-title-comp
       :title="
         ($t('direction') == 'rtl' ? $t('categoryTitle') + ' ' : '') +
-        category[$i18n.locale.split('-')[0] + '_name'] +
+        (category[$i18n.locale.split('-')[0] + '_name'] ? category[$i18n.locale.split('-')[0] + '_name'] : '')+
         ($t('direction') != 'rtl' ? ' ' + $t('categoryTitle') : '')
       "
     ></main-title-comp>

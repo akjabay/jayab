@@ -6,30 +6,33 @@
   >
     <q-toolbar>
       <q-toolbar-title @click="$router.push('/')" class="text-pointer">
+        <q-img class="q-mx-sm" width="40px" src="icons/favicon-128x128.png" />
         <span>{{ $t('jayab') }}</span>
+        
       </q-toolbar-title>
 
       <div class="row" v-if="$q.screen.gt.xs">
         <div
-          class="ad-secondary-btn q-pa-sm q-mx-sm pointer text-h6"
+          class="ad-secondary-btn q-pa-sm q-mx-sm pointer text-body1"
           :class="isRouteActive('/')"
           @click="$router.push('/')"
         >
           {{ $t("home") }}
         </div>
         <div
-          class="ad-secondary-btn q-pa-sm q-mx-sm pointer text-h6"
-          :class="isRouteActive('/items/list')"
+          class="ad-secondary-btn q-pa-sm q-mx-sm pointer text-body1"
+          :class="isRouteActive('/items', ['/items/list', '/items/map'])"
           @click="$router.push('/items/list')"
         >
-          {{ $t("list") }}
+          {{ $t("publicProducts") }}
         </div>
         <div
-          class="ad-secondary-btn q-pa-sm q-mx-sm pointer text-h6"
-          :class="isRouteActive('/items/map')"
-          @click="$router.push('/items/map')"
+          v-if="isRealStateOwner"
+          class="ad-secondary-btn q-pa-sm q-mx-sm pointer text-body1"
+          :class="isRouteActive('/accounts/plus', ['/accounts/plus/manage-map', '/accounts/plus/manage-list'])"
+          @click="$router.push('/accounts/plus')"
         >
-          {{ $t("map") }}
+          {{ $t("manage") }}
         </div>
       </div>
 
@@ -60,13 +63,13 @@
             <q-item
               clickable
               v-close-popup
-              @click="onItemClick('/accounts/profile')"
+              @click="onItemClick('/accounts/profile/' + user.username)"
             >
               <q-item-section avatar>
                 <q-avatar icon="person" />
               </q-item-section>
               <q-item-section>
-                <q-item-label>{{ $t("account") }}</q-item-label>
+                <q-item-label>{{ user.name }}</q-item-label>
               </q-item-section>
             </q-item>
 
@@ -98,25 +101,26 @@
     <q-toolbar v-if="$q.screen.lt.sm" class="text-primary justify-center">
       <div class="row justify-center">
         <div
-          class="ad-secondary-btn q-pa-sm q-mx-sm pointer text-h6"
+          class="ad-secondary-btn q-pa-sm q-mx-sm pointer text-body1"
           :class="isRouteActive('/')"
           @click="$router.push('/')"
         >
           {{ $t("home") }}
         </div>
         <div
-          class="ad-secondary-btn q-pa-sm q-mx-sm pointer text-h6"
-          :class="isRouteActive('/items/list')"
+          class="ad-secondary-btn q-pa-sm q-mx-sm pointer text-body1"
+          :class="isRouteActive('/items', ['/items/list', '/items/map'])"
           @click="$router.push('/items/list')"
         >
-          {{ $t("list") }}
+          {{ $t("publicProducts") }}
         </div>
         <div
-          class="ad-secondary-btn q-pa-sm q-mx-sm pointer text-h6"
-          :class="isRouteActive('/items/map')"
-          @click="$router.push('/items/map')"
+          v-if="isRealStateOwner"
+          class="ad-secondary-btn q-pa-sm q-mx-sm pointer text-body1"
+          :class="isRouteActive('/accounts/plus', ['/accounts/plus/manage-map', '/accounts/plus/manage-list'])"
+          @click="$router.push('/accounts/plus')"
         >
-          {{ $t("map") }}
+          {{ $t("manage") }}
         </div>
       </div>
     </q-toolbar>
@@ -139,6 +143,7 @@ export default defineComponent({
   setup() {
     return {
       isBackExists: ref(false),
+      isRealStateOwner: ref(false)
     };
   },
   methods: {
@@ -150,9 +155,9 @@ export default defineComponent({
       this.clearAuth();
       this.$router.push("/accounts/login");
     },
-    isRouteActive(route) {
+    isRouteActive(route, routes = []) {
       const currentRoute = this.$route.matched[1].path;
-      return currentRoute == route ? "active" : "";
+      return currentRoute == route || routes.includes(this.$route.path) ? "active" : "";
     },
     onSetLocals() {
       const lang = localStorage.getItem("locale");
@@ -174,8 +179,8 @@ export default defineComponent({
           if (result.data.errors) {
             this.$q.notify({
               type: "warning",
-              message: "failed",
-              caption: "userNotFound",
+              message: this.$t("failed"),
+              caption: this.$t("userNotFound"),
             });
           } else if (result.data.data.authFindMe.id) {
             const fetchedUser = result.data.data.authFindMe;
@@ -184,8 +189,8 @@ export default defineComponent({
         } catch (error) {
           this.$q.notify({
             type: "negative",
-            message: "failed",
-            caption: "failed",
+            message: this.$t("failed"),
+            caption: this.$t("failed"),
           });
         }
       }
@@ -203,6 +208,10 @@ export default defineComponent({
       this.$router.options.history &&
       this.$router.options.history.state &&
       this.$router.options.history.state.back;
+
+      if (this.user && this.user.permissions) {
+        this.isRealStateOwner = this.user.permissions.find((p) => p.codename === 'write product');
+      }
   },
   beforeMount() {},
 });

@@ -19,7 +19,6 @@ export default {
   map: 'نقشه',
   list: 'لیست',
   blog: 'بلاگ',
-  products: 'محصولات',
   aboutUs: 'درباره ما',
   tickets: 'پرسش و پاسخ',
   profile: 'حساب کاربری',
@@ -58,6 +57,9 @@ export default {
   yourOrderHasSubmittedWeWillCallYouSoon: 'سفارش شما ثبت شد. در اسرع وقت با شما تماس میگیریم.',
   search: 'جستجو',
   publicMode: 'حالت عمومی',
+  setCityIsRequired: 'ابتدا شهر خود را انتخاب کنید',
+  informationIsWrong: 'اطلاعات نادرست است. یا کاربری با این مشخصات موجود نیست!',
+  copyProfileURL: 'کپی آدرس حساب',
 
   emptyList: 'لیست خالی است!',
 
@@ -126,6 +128,7 @@ export default {
 
   product: 'ملک',
   products: 'املاک',
+  publicProducts: 'املاک عمومی',
   productsTitle: 'املاک',
   newProductsTitle: "املاک جدید",
   trendingProductsTitle: "املاک داغ",
@@ -170,7 +173,7 @@ export default {
   contactUs: 'تماس با ما',
   rules: 'قوانین',
 
-  copyRight: '© حق کپی رایت برای شرکت اوان دانه محفوظ است',
+  copyRight: '© حق کپی رایت برای جایاب محفوظ است',
 
   chooseCategory: 'انتخاب دسته بندی',
   categoryTitle: 'دسته',

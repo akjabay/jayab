@@ -10,7 +10,7 @@
         class="q-pt-none"
       >
         <div>
-          {{ "youHaveToLoginFirst" }}
+          {{ $t("youHaveToLoginFirst") }}
         </div>
         <div class="q-pt-md text-center">
           <q-btn
@@ -25,7 +25,7 @@
       </q-card-section>
 
       <q-card-actions :align="$t('direction') == 'rtl' ? 'left' : 'right'">
-        <q-btn flat :label="'ok'" color="primary" v-close-popup />
+        <q-btn flat :label="$t('ok')" color="primary" v-close-popup />
       </q-card-actions>
     </q-card>
   </q-dialog>

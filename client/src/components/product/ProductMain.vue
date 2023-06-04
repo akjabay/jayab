@@ -25,7 +25,7 @@
         <div class="q-my-sm">
           {{ product.address }}
         </div>
-        <div class="q-my-sm">
+        <div v-if="product.userId && isUserLoggedIn && (user.id == product.userId.id || user.is_superuser == 1)" class="q-my-sm">
           {{ $t('owner') + ': ' + product.ownerInfo }}
         </div>
         <div class="q-my-sm">
@@ -141,8 +141,8 @@ export default defineComponent({
         if (result.status === 200) {
             this.$q.notify({
               type: "positive",
-              message: "success",
-              caption: "success",
+              message: this.$t("success"),
+              caption: this.$t("success"),
             });
           }
       } catch (error) {
@@ -172,7 +172,7 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapState(useAuthStore, ["user"]),
+    ...mapState(useAuthStore, ["isUserLoggedIn", "user"]),
   },
   mounted () {
     this.fetchData();

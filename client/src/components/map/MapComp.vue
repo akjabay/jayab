@@ -11,16 +11,16 @@
 
 <script>
 import { defineComponent, ref } from "vue";
-import "leaflet/dist/leaflet.css";
 import L from "leaflet";
-import 'leaflet-draw/dist/leaflet.draw.js';
-import 'leaflet-draw/dist/leaflet.draw.css';
+import "leaflet/dist/leaflet.css";
+import "leaflet-draw/dist/leaflet.draw.css";
+import "leaflet-draw/dist/leaflet.draw.js";
 import MapAddPointComp from "/src/components/map/MapAddPointComp.vue";
 
 export default defineComponent({
   name: "MapComp",
   components: {
-    MapAddPointComp
+    MapAddPointComp,
   },
   props: {
     currentLocation: Object,
@@ -30,15 +30,19 @@ export default defineComponent({
     },
     mapWidth: {
       type: String,
-      default: '80vh',
+      default: "80vh",
     },
     liteMode: {
       type: Boolean,
-      default: false
+      default: false,
     },
     singleMode: {
       type: Boolean,
-      default: false
+      default: false,
+    },
+    isAdding: {
+      type: Boolean,
+      default: false,
     },
   },
   setup() {
@@ -51,71 +55,85 @@ export default defineComponent({
   },
   methods: {
     onClickToMap(ev) {
-      this.$refs.pointAddDialog.onShaw({ ev })
-    },
-    onClickToMarker(ev) {
-      const marker = this.markers.find((m) => m.latlng === `${ev.latlng.lat},${ev.latlng.lng}`);
-      if (!this.singleMode && this.liteMode) {
-        if (marker) {
-          this.$router.push('/products/' + marker.pid)
-        }
-      } else {
-        this.$refs.pointAddDialog.onSetInfo({ marker });
+      if (this.isAdding) {
+        this.$refs.pointAddDialog.onShaw({ ev });
       }
     },
-    onSubmitPoint ({ updatedMarker, newMarker }) {
+    onClickToMarker(ev) {
+      const marker = this.markers.find(
+        (m) => m.latlng === `${ev.latlng.lat},${ev.latlng.lng}`
+      );
+      if (!this.singleMode && this.liteMode) {
+        if (marker) {
+          this.$router.push("/products/" + marker.pid);
+        }
+      } else {
+        if (this.isAdding) {
+          this.$refs.pointAddDialog.onSetInfo({ marker });
+        }
+      }
+    },
+    onSubmitPoint({ updatedMarker, newMarker }) {
       if (updatedMarker) {
         const updatingMarker = updatedMarker;
-        updatingMarker.images = updatedMarker.images.map((imgUrl) => { return { url: imgUrl } });
-        const updatingIdx = this.markers.findIndex((m) => m.pid === updatedMarker.pid);
+        updatingMarker.images = updatedMarker.images.map((imgUrl) => {
+          return { url: imgUrl };
+        });
+        const updatingIdx = this.markers.findIndex(
+          (m) => m.pid === updatedMarker.pid
+        );
         this.markers[updatingIdx] = updatingMarker;
         this.setMarkerOnMap({ marker: updatingMarker });
       }
       if (newMarker) {
         const addingMarker = newMarker;
         if (newMarker.images && newMarker.images.length > 0) {
-          addingMarker.images = newMarker.images.map((imgUrl) => { return { url: imgUrl } });
+          addingMarker.images = newMarker.images.map((imgUrl) => {
+            return { url: imgUrl };
+          });
         }
         this.markers.push(addingMarker);
         this.setMarkerOnMap({ marker: addingMarker });
       }
     },
-    onAddingMarker ({ markers = [] }) {
+    onAddingMarker({ markers = [] }) {
       const _this = this;
-      this.map.eachLayer((layer) => {
-        if (layer._latlng) {
-          layer.remove();
-        }
-      });
-      markers.forEach((m) => {
-        _this.setMarkerOnMap({ marker: m });
-      })
-      this.markers = markers;
+      if (this.map && this.map.eachLayer) {
+        this.map.eachLayer((layer) => {
+          if (layer._latlng) {
+            layer.remove();
+          }
+        });
+        markers.forEach((m) => {
+          _this.setMarkerOnMap({ marker: m });
+        });
+        this.markers = markers;
+      }
     },
-    setMarkerOnMap ({ marker }) {
+    setMarkerOnMap({ marker }) {
       if (marker && marker.latlng) {
         const _this = this;
-        const latlng = marker.latlng.split(',');
+        const latlng = marker.latlng.split(",");
         L.marker(latlng)
           .bindTooltip(`${marker.area}متر`, {
-            permanent: true
+            permanent: true,
           })
           .bindPopup(`${marker.name} ${marker.area}متر`)
-          .addTo(_this.map)
-          .on('click', function(ev) {
-            _this.onClickToMarker(ev)
+          .addTo(this.map)
+          .on("click", function (ev) {
+            _this.onClickToMarker(ev);
           });
       }
     },
-    setCurrentPositionMap({ location = '' } = []) {
+    setCurrentPositionMap({ location = "" } = []) {
       const currentLocation = location ? location : this.currentLocation;
       const current = [
         currentLocation && currentLocation.latitude
           ? currentLocation.latitude
-          : '35.7219',
+          : "35.7219",
         currentLocation && currentLocation.longitude
           ? currentLocation.longitude
-          : '51.3347',
+          : "51.3347",
       ];
       if (current[0]) {
         const position = current;
@@ -135,7 +153,6 @@ export default defineComponent({
       const _this = this;
 
       const map = L.map("map");
-      // const map = L.map("map", {drawControl: true}).setView(current, 5);
 
       const osm = L.tileLayer(
         "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
@@ -165,27 +182,31 @@ export default defineComponent({
         .addTo(map);
 
       if (!this.liteMode) {
-        map.on('click', function(ev) {
-          _this.onClickToMap(ev)
+        map.on("click", function (ev) {
+          _this.onClickToMap(ev);
         });
       }
 
       // detect zoom
-      map.on('zoomend', function(ev) {
+      map.on("zoomend", function (ev) {
         _this.zoomLevel = ev.target._zoom;
       });
 
-      map.on('moveend', function(e) {
+      map.on("moveend", function (e) {
         const bounds = map.getBounds();
-        const center = [(bounds._northEast.lat + bounds._southWest.lat) / 2, (bounds._northEast.lng + bounds._southWest.lng) / 2];
-        const maxDistance = +bounds._northEast.distanceTo(bounds._southWest).toFixed(0);
-        _this.$emit('on-change-view', { maxDistance, center })
+        const center = [
+          (bounds._northEast.lat + bounds._southWest.lat) / 2,
+          (bounds._northEast.lng + bounds._southWest.lng) / 2,
+        ];
+        const maxDistance = +bounds._northEast
+          .distanceTo(bounds._southWest)
+          .toFixed(0);
+        _this.$emit("on-change-view", { maxDistance, center });
       });
 
       this.map = map;
 
       this.setCurrentPositionMap();
-
     },
   },
   mounted() {

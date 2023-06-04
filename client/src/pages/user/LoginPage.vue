@@ -1,63 +1,65 @@
 <template>
-  <div class="row justify-center text-center q-mt-xl">
-    <div class="col-12 col-md-4 col-sm-6 text-center">
-      <main-title-comp :title="$t('login')"></main-title-comp>
-      <div class="q-py-sm q-mx-sm">
-        <div class="col-12 text-center">
-          <q-input
-            required
-            outlined
-            class="q-mt-sm"
-            v-model="user"
-            :rules="[rules.required]"
-            :label="$t('inputUser')"
-          ></q-input>
-          <q-input
-            required
-            outlined
-            class="q-mt-sm"
-            v-model="password"
-            type="password"
-            :rules="[rules.required]"
-            :label="$t('inputPassword')"
-          ></q-input>
-
-          <q-btn
-            :loading="loading"
-            @click="login"
-            class="full-width q-mt-sm ad-primary-btn"
-          >
-            {{ $t('login') }}
-          </q-btn>
+  <q-page>
+    <div class="row justify-center text-center q-mt-xl">
+      <div class="col-12 col-md-4 col-sm-6 text-center">
+        <main-title-comp :title="$t('login')"></main-title-comp>
+        <div class="q-py-sm q-mx-sm">
+          <div class="col-12 text-center">
+            <q-input
+              required
+              outlined
+              class="q-mt-sm"
+              v-model="user"
+              :rules="[rules.required]"
+              :label="$t('inputUser')"
+            ></q-input>
+            <q-input
+              required
+              outlined
+              class="q-mt-sm"
+              v-model="password"
+              type="password"
+              :rules="[rules.required]"
+              :label="$t('inputPassword')"
+            ></q-input>
+  
+            <q-btn
+              :loading="loading"
+              @click="login"
+              class="full-width q-mt-sm ad-primary-btn"
+            >
+              {{ $t('login') }}
+            </q-btn>
+          </div>
         </div>
+  
+        <q-card bordered class="q-pa-sm q-ma-sm" flat>
+          <span>{{ $t('didYouForgetYourPassword') }}</span>
+          <q-btn
+            no-caps
+            dense
+            flat
+            class="q-mx-xs"
+            color="secondary"
+            @click="$router.push('/accounts/reset-password')"
+            >{{ $t('resetPassword') }}</q-btn
+          >
+        </q-card>
+        <q-card bordered class="q-pa-sm q-ma-sm" flat>
+          <span>{{ $t('dontHaveAnAccount') }}</span>
+          <q-btn
+            no-caps
+            dense
+            flat
+            class="q-mx-xs"
+            color="primary"
+            @click="$router.push('/accounts/signup')"
+            >{{ $t('signup') }}</q-btn
+          >
+        </q-card>
       </div>
-
-      <q-card bordered class="q-pa-sm q-ma-sm" flat>
-        <span>{{ $t('didYouForgetYourPassword') }}</span>
-        <q-btn
-          no-caps
-          dense
-          flat
-          class="q-mx-xs"
-          color="secondary"
-          @click="$router.push('/accounts/reset-password')"
-          >{{ $t('resetPassword') }}</q-btn
-        >
-      </q-card>
-      <q-card bordered class="q-pa-sm q-ma-sm" flat>
-        <span>{{ $t('dontHaveAnAccount') }}</span>
-        <q-btn
-          no-caps
-          dense
-          flat
-          class="q-mx-xs"
-          color="primary"
-          @click="$router.push('/accounts/signup')"
-          >{{ $t('signup') }}</q-btn
-        >
-      </q-card>
     </div>
-  </div>
+  </q-page>
 </template>
 
 <script>
@@ -110,7 +112,7 @@ export default defineComponent({
           this.$q.notify({
             type: "warning",
             message: this.$t("failed"),
-            caption: this.$t("fillRequiredFields"),
+            caption: this.$t("informationIsWrong"),
           });
         } else if (result.data.data.authLogin.token) {
           const dbUser = result.data.data.authLogin.user;

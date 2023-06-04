@@ -18,8 +18,8 @@
       </q-card-section>
     </q-card>
 
-    <div v-for="(plan, i) in plans" :key="i">
-      <q-card flat class="q-ma-sm ad-fixed-card ad-box-bordered">
+    <div class="row justify-center">
+      <q-card v-for="(plan, i) in plans" :key="i" flat class="q-ma-sm ad-fixed-card ad-box-bordered">
         <q-card-section>
           <div class="text-bold q-mb-md">
             {{ "🥇 " + plan.name }}
@@ -41,7 +41,7 @@
           <div>{{ $t("activate") + " " + $t("quarterly") }}</div>
           <div class="text-center q-ma-sm">
             <span style="font-size: 25px;">💥</span>
-            {{ (((3 * plan.price.month) - plan.price.quarter) / (3 * plan.price.month)) * 100 }}% {{ $t('discount') }}
+            {{ plan.price.month ? (((3 * plan.price.month) - plan.price.quarter) / (3 * plan.price.month)) * 100 : 0 }}% {{ $t('discount') }}
             <span style="font-size: 25px;">💥</span>
           </div>
           <q-btn
@@ -56,7 +56,7 @@
           <div>{{ $t("activate") + " " + $t("yearly") }}</div>
           <div class="text-center q-ma-sm">
             <span style="font-size: 25px;">💥</span>
-            {{ (((12 * plan.price.month) - plan.price.year) / (12 * plan.price.month)) * 100 }}% {{ $t('discount') }}
+            {{ plan.price.month ? (((12 * plan.price.month) - plan.price.year) / (12 * plan.price.month)) * 100 : 0 }}% {{ $t('discount') }}
             <span style="font-size: 25px;">💥</span>
           </div>
           <q-btn

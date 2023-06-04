@@ -83,7 +83,7 @@
                 outlined
                 class="q-mt-sm text-right"
                 v-model="info.price"
-                :rules="[rules.required]"
+                :rules="[]"
                 :label="$t('inputPrice')"
                 :style="{ direction: $t('direction') }"
               ></q-input>
@@ -249,8 +249,8 @@ export default defineComponent({
             this.$emit('on-submit-point', { updatedMarker: this.info });
             this.$q.notify({
               type: "positive",
-              message: "success",
-              caption: "success",
+              message: this.$t("success"),
+              caption: this.$t("success"),
             });
             this.dialog = false;
           }
@@ -264,8 +264,8 @@ export default defineComponent({
             this.$emit('on-submit-point', { newMarker: this.info });
             this.$q.notify({
               type: "positive",
-              message: "success",
-              caption: "success",
+              message: this.$t("success"),
+              caption: this.$t("success"),
             });
             this.dialog = false;
           }

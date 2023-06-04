@@ -231,12 +231,13 @@ export default {
   },
 
   userFind: function (args = []) {
-    const { id, email } = args;
+    const { id, email, username } = args;
     return request.post("/graphql", {
       query: `query {
             userFind (query: {
               ${id ? `id: "${id}"` : ''}
               ${email ? `email: "${email}"` : ''}
+              ${username ? `username: "${username}"` : ''}
             }) {
               id
               avatar_url
