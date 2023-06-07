@@ -82,6 +82,7 @@ module.exports = {
         const params = {};
         query.id ? params._id = query.id : '';
         query.email ? params.email = query.email: '';
+        query.username ? params.username = query.username: '';
         const user = await db["User"].findOne(params).populate("permissions");
         user.phone = user.phone ? decrypt(user.phone) : user.phone;
         return user;

@@ -13,6 +13,8 @@
 
 <script>
 import { defineComponent, ref } from 'vue'
+import { useAuthStore } from "src/stores/auth";
+import { mapActions } from "pinia";
 import AppHeader from 'src/components/main/AppHeader.vue'
 import AppFooter from 'src/components/main/AppFooter.vue'
 
@@ -29,6 +31,27 @@ export default defineComponent({
 
     return {
     }
+  },
+  computed: {
+  },
+  methods: {
+    ...mapActions(useAuthStore, ["tryAutoLogin"]),
+    onSetLocals() {
+      const lang = localStorage.getItem("locale");
+      if (lang) {
+        this.$i18n.locale = lang;
+      } else {
+        this.$i18n.locale = "fa-IR";
+      }
+      const mode = localStorage.getItem("mode");
+      if (mode) {
+        this.$q.dark.set(mode == "true" ? true : false);
+      }
+    },
+  },
+  created () {
+    this.tryAutoLogin();
+    this.onSetLocals();
   }
 })
 </script>

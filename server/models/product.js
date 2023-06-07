@@ -29,21 +29,21 @@ const productSchema = new Schema(
         },
 
         area:  {
-            type: String,
+            type: Number,
             required: true,
         },
 
         areaOfBuilding:  {
-            type: String,
+            type: Number,
             required: false,
         },
 
         price: {
-            type: String,
+            type: Number,
             required: false,
         },
         pricePerMeter: {
-            type: String,
+            type: Number,
             required: false,
         },
         rooms: {

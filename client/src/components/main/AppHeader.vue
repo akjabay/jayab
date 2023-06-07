@@ -27,7 +27,9 @@
           {{ $t("publicProducts") }}
         </div>
         <div
-          v-if="isRealStateOwner"
+        v-if="user && (user.permissions.find(
+            (p) => p.codename === 'write product'
+          ) || user.is_superuser === 1)"
           class="ad-secondary-btn q-pa-sm q-mx-sm pointer text-body1"
           :class="isRouteActive('/accounts/plus', ['/accounts/plus/manage-map', '/accounts/plus/manage-list'])"
           @click="$router.push('/accounts/plus')"
@@ -115,7 +117,9 @@
           {{ $t("publicProducts") }}
         </div>
         <div
-          v-if="isRealStateOwner"
+          v-if="user && (user.permissions.find(
+            (p) => p.codename === 'write product'
+          ) || user.is_superuser === 1)"
           class="ad-secondary-btn q-pa-sm q-mx-sm pointer text-body1"
           :class="isRouteActive('/accounts/plus', ['/accounts/plus/manage-map', '/accounts/plus/manage-list'])"
           @click="$router.push('/accounts/plus')"
@@ -136,14 +140,14 @@ import api from "/src/api/index";
 
 export default defineComponent({
   name: "AppHeader",
-  props: {},
+  props: {
+  },
   components: {
     DarkComp,
   },
   setup() {
     return {
       isBackExists: ref(false),
-      isRealStateOwner: ref(false)
     };
   },
   methods: {
@@ -158,18 +162,6 @@ export default defineComponent({
     isRouteActive(route, routes = []) {
       const currentRoute = this.$route.matched[1].path;
       return currentRoute == route || routes.includes(this.$route.path) ? "active" : "";
-    },
-    onSetLocals() {
-      const lang = localStorage.getItem("locale");
-      if (lang) {
-        this.$i18n.locale = lang;
-      } else {
-        this.$i18n.locale = "fa-IR";
-      }
-      const mode = localStorage.getItem("mode");
-      if (mode) {
-        this.$q.dark.set(mode == "true" ? true : false);
-      }
     },
 
     async fetchData() {
@@ -199,19 +191,13 @@ export default defineComponent({
   computed: {
     ...mapState(useAuthStore, ["isUserLoggedIn", "user"]),
   },
-  mounted() {
-    this.tryAutoLogin();
-    this.onSetLocals();
+  mounted () {
     // this.fetchData();
     this.isBackExists =
       this.$router.options &&
       this.$router.options.history &&
       this.$router.options.history.state &&
       this.$router.options.history.state.back;
-
-      if (this.user && this.user.permissions) {
-        this.isRealStateOwner = this.user.permissions.find((p) => p.codename === 'write product');
-      }
   },
   beforeMount() {},
 });

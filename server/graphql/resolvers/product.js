@@ -155,7 +155,7 @@ module.exports = {
                 product.ownerInfo = '';
             }
             product.userId.phone ? product.userId.phone = decrypt(product.userId.phone) : '';
-            
+
             return product;
         } else {
             return null;
@@ -176,11 +176,26 @@ module.exports = {
             ? matchParams.categoryId = new mongoose.Types.ObjectId(query.categoryId)
             : '';
 
-        query.area ? matchParams.area = query.area : '';
-        query.pricePerMeter ? matchParams.pricePerMeter = query.pricePerMeter : '';
-        query.areaOfBuilding ? matchParams.areaOfBuilding = query.areaOfBuilding : '';
-        query.rooms ? matchParams.rooms = query.rooms : '';
-        query.price ? matchParams.price = query.price : '';
+        query.area && query.area !== ','  ? matchParams.area = query.area : '';
+        query.pricePerMeter && query.pricePerMeter !== ','  ? matchParams.pricePerMeter = query.pricePerMeter : '';
+        query.areaOfBuilding && query.areaOfBuilding !== ','  ? matchParams.areaOfBuilding = query.areaOfBuilding : '';
+        query.rooms && query.rooms !== ','  ? matchParams.rooms = query.rooms : '';
+        query.price && query.price !== ','  ? matchParams.price = query.price : '';
+
+        matchParams.area && matchParams.area.includes(',') && matchParams.area.split(',')[0]
+            ? matchParams.area = { '$gte': +matchParams.area.split(',')[0], '$lte': +matchParams.area.split(',')[1] }
+            : '';
+        matchParams.pricePerMeter && matchParams.pricePerMeter.includes(',') && matchParams.pricePerMeter.split(',')[0]
+            ? matchParams.pricePerMeter = { '$gte': +matchParams.pricePerMeter.split(',')[0], '$lte': +matchParams.pricePerMeter.split(',')[1] }
+            : '';
+        matchParams.areaOfBuilding && matchParams.areaOfBuilding.includes(',') && matchParams.areaOfBuilding.split(',')[0]
+            ? matchParams.areaOfBuilding = { '$gte': +matchParams.areaOfBuilding.split(',')[0], '$lte': +matchParams.areaOfBuilding.split(',')[1] }
+            : '';
+        matchParams.price && matchParams.price.includes(',') && matchParams.price.split(',')[0]
+            ? matchParams.price = { '$gte': +matchParams.price.split(',')[0], '$lte': +matchParams.price.split(',')[1] }
+            : '';
+
+            console.log(matchParams, 'matchParams')
 
         // for only view publics
         if (!user || (user && user.is_superuser !== 1)) {
@@ -207,20 +222,6 @@ module.exports = {
                         $match: matchParams
                     }
                 ])
-                // .lookup({
-                //     from: "users",
-                //     localField: "userId",
-                //     foreignField: "_id",
-                //     as: "userId",
-                // })
-                // .unwind('userId')
-                // .lookup({
-                //     from: "categories",
-                //     localField: "categoryId",
-                //     foreignField: "_id",
-                //     as: "categoryId",
-                // })
-                // .unwind('categoryId')
                 .exec();
 
             const slicedProducts = pagination.limit
@@ -279,6 +280,7 @@ module.exports = {
         const productParams = {};
         query.email ? params.email = query.email : '';
         query.userId ? params._id = query.userId : '';
+        query.username ? params.username = query.username : '';
 
         // for only view publics
         if (!user || (user && user.is_superuser !== 1)) {
@@ -404,7 +406,7 @@ module.exports = {
                 .skip(pagination.offset)
                 .limit(pagination.limit)
                 .exec();
-            
+
             const total = await db["Product"]
                 .find({
                     userId: creator,

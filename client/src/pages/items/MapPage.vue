@@ -1,27 +1,5 @@
 <template>
   <q-page>
-
-    <div>
-      <div class="row">
-        <q-space></q-space>
-        <q-btn @click="filtering = !filtering" outline class="q-ma-xs ad-font-color" no-caps>
-          <q-icon class="" size="1.5em" v-if="filtering" name="fas fa-caret-up" />
-          <q-icon class="" size="1.5em" v-else name="fa fa-filter" />
-        </q-btn>
-      </div>
-      
-      <div v-if="filtering">
-        <filter-comp ref="filterComp" v-on:on-change-filter="onChangeFilter" :filterOptions="filterOptions"></filter-comp>
-        <div class="row">
-          <q-space></q-space>
-          <q-btn @click="onResetFilter" outline class="q-ma-xs ad-font-color" :label="$t('clean')" no-caps></q-btn>
-          <q-btn @click="fetchData" class="q-ma-xs ad-primary-btn" :label="$t('search')" no-caps>
-            <q-icon class="q-pr-md" name="fa fa-magnifying-glass"/>
-          </q-btn>
-        </div>
-      </div>
-    </div>
-
     <map-comp ref="mapComponent" :liteMode="true" v-on:on-change-view="onChangeView"></map-comp>
     <q-inner-loading :showing="!loaded" />
   </q-page>
@@ -29,7 +7,6 @@
 
 <script>
 import { defineComponent, ref } from "vue";
-import FilterComp from "/src/components/main/FilterComp.vue";
 import MapComp from "/src/components/map/MapComp.vue";
 import { useAuthStore } from "src/stores/auth";
 import { mapState } from 'pinia';
@@ -37,9 +14,11 @@ import api from "/src/api/index";
 
 export default defineComponent({
   name: "MapPage",
+  props: {
+    filterOptions: Object
+  },
   setup () {
     return {
-      filterOptions: ref({}),
       products: ref([]),
       currentPage: ref(1),
       pagination: ref({
@@ -52,19 +31,11 @@ export default defineComponent({
     }
   },
   components: {
-    FilterComp,
     MapComp,
   },
   methods: {
     onChangeView ({ maxDistance, center }) {
       this.fetchData({ maxDistance, center })
-    },
-    onResetFilter () {
-      this.filterOptions = {};
-      this.$refs.filterComp.resetState();
-    },
-    onChangeFilter (filter) {
-      this.filterOptions = filter;
     },
     async onChangePage(page) {
       await this.fetchData({ page });
@@ -84,7 +55,11 @@ export default defineComponent({
           );
         const params = {};
         Object.keys(this.filterOptions).forEach((key) => {
-          params[key] = this.filterOptions[key];
+          if (typeof this.filterOptions[key] === 'object' && (Object.keys(this.filterOptions[key]).includes('min'))) {
+            params[key] = `${this.filterOptions[key].min},${this.filterOptions[key].max}`
+          } else {
+            params[key] = this.filterOptions[key];
+          }
         });
         const result = await api.product.productFindAll({
           limit: this.pagination.limit,

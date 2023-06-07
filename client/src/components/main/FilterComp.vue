@@ -2,7 +2,7 @@
   <div>
     <div class="row">
       <select-comp
-        class="col-md-6 col-sm-6 col-xs-6"
+        :class="onlySelect ? 'col-md-12 col-sm-12 col-xs-12' : 'col-md-6 col-sm-6 col-xs-6'"
         :items="categories"
         :item="filter.category"
         v-on:on-select-item="onSelectCategory"
@@ -18,70 +18,111 @@
       <div class="col-12 col-md-12 col-sm-12 col-xs-12">
 
         <div v-if="!onlySelect" class="row q-mx-md">
-          <div class="col-md-3 col-sm-4 col-xs-6 q-px-sm">
-            <q-input
-              outlined
-              dense
-              class="q-mt-sm"
-              type="number"
-              min="0"
-              @change="onChangeFilter"
-              v-model="filter.area"
-              :rules="[]"
-              :label="$t('inputArea')"
-            ></q-input>
+          <div class="col-md-12 col-sm-12 col-xs-12 q-px-sm">
+            <q-separator class="q-my-xs" />
           </div>
-          <div class="col-md-3 col-sm-4 col-xs-6 q-px-sm">
-            <q-input
-              outlined
-              dense
-              class="q-mt-sm"
-              type="number"
-              min="0"
-              @change="onChangeFilter"
-              v-model="filter.pricePerMeter"
-              :rules="[]"
-              :label="$t('inputPricePerMeter')"
-            ></q-input>
+          <div class="col-md-6 col-sm-6 col-xs-12 q-px-sm">
+            <div class="row justify-center">
+              <div class="col-md-6 col-sm-6 col-xs-6">
+                <q-input
+                  outlined
+                  square
+                  dense
+                  class="q-my-xs q-pa-none"
+                  type="number"
+                  min="0"
+                  @change="onChangeFilter"
+                  v-model="filter.price.min"
+                  :rules="[]"
+                  :label="$t('min') + ' ' + $t('inputPrice') + ' ' + $t('total')"
+                ></q-input>
+              </div>
+              <div class="col-md-6 col-sm-6 col-xs-6">
+                <q-input
+                  outlined
+                  square
+                  dense
+                  class="q-my-xs q-pa-none"
+                  type="number"
+                  min="0"
+                  @change="onChangeFilter"
+                  v-model="filter.price.max"
+                  :rules="[]"
+                  :label="$t('max') + ' ' + $t('inputPrice') + ' ' + $t('total')"
+                ></q-input>
+              </div>
+            </div>
           </div>
-          <div class="col-md-3 col-sm-4 col-xs-6 q-px-sm">
-            <q-input
-              outlined
-              dense
-              class="q-mt-sm"
-              type="number"
-              min="0"
-              @change="onChangeFilter"
-              v-model="filter.areaOfBuilding"
-              :rules="[]"
-              :label="$t('inputAreaOfBuilding')"
-            ></q-input>
+          <div class="col-md-6 col-sm-6 col-xs-12 q-px-sm">
+            <div class="row justify-center">
+              <div class="col-md-6 col-sm-6 col-xs-6">
+                <q-input
+                  outlined
+                  square
+                  dense
+                  class="q-my-xs q-pa-none"
+                  type="number"
+                  min="0"
+                  @change="onChangeFilter"
+                  v-model="filter.pricePerMeter.min"
+                  :rules="[]"
+                  :label="$t('min') + ' ' + $t('inputPricePerMeter')"
+                ></q-input>
+              </div>
+              <div class="col-md-6 col-sm-6 col-xs-6">
+                <q-input
+                  outlined
+                  square
+                  dense
+                  class="q-my-xs q-pa-none"
+                  type="number"
+                  min="0"
+                  @change="onChangeFilter"
+                  v-model="filter.pricePerMeter.max"
+                  :rules="[]"
+                  :label="$t('max') + ' ' + $t('inputPricePerMeter')"
+                ></q-input>
+              </div>
+            </div>
           </div>
-          <div class="col-md-3 col-sm-4 col-xs-6 q-px-sm">
-            <q-input
-              outlined
-              dense
-              class="q-mt-sm"
-              type="number"
-              min="0"
-              @change="onChangeFilter"
+          <div class="col-md-12 col-sm-12 col-xs-12 q-px-sm">
+            <q-separator class="q-my-xs" />
+            <div class="text-normal">{{ $t('inputRooms') }}</div>
+            <q-slider
               v-model="filter.rooms"
-              :rules="[]"
-              :label="$t('inputRooms')"
-            ></q-input>
-          </div>
-          <div class="col-md-3 col-sm-4 col-xs-6 q-px-sm">
-            <q-input
-              outlined
-              dense
-              class="q-mt-sm"
-              type="number"
-              min="0"
+              class="ad-font-color"
               @change="onChangeFilter"
-              v-model="filter.price"
-              :rules="[]"
-              :label="$t('inputPrice')"
-            ></q-input>
+              label-always
+              :min="0"
+              :max="5"
+              :step="1"
+            />
+          </div>
+          <div class="col-md-12 col-sm-12 col-xs-12 q-px-sm">
+            <q-separator class="q-my-xs" />
+            <div class="text-normal">{{ $t('totalArea') }}</div>
+            <q-range
+              v-model="filter.area"
+              class="ad-font-color"
+              @change="onChangeFilter"
+              label-always
+              :min="10"
+              :max="2000"
+              :step="5"
+            />
+          </div>
+          <div class="col-md-12 col-sm-12 col-xs-12 q-px-sm">
+            <q-separator class="q-my-xs" />
+            <div class="text-normal">{{ $t('inputAreaOfBuilding') }}</div>
+            <q-range
+              v-model="filter.areaOfBuilding"
+              class="ad-font-color"
+              @change="onChangeFilter"
+              label-always
+              :min="10"
+              :max="2000"
+              :step="5"
+            />
           </div>
         </div>
       </div>
@@ -104,7 +145,7 @@
     },
     components: {
       SelectComp,
-      CityComp
+      CityComp,
     },
     setup() {
       return {
@@ -112,17 +153,36 @@
         provinces: ref([]),
         cities: ref([]),
         filter: ref({
-          area: "",
-          pricePerMeter: "",
-          areaOfBuilding: "",
-          rooms: "",
+          rooms: 0,
+          area: {
+            min: 10,
+            max: 500
+          },
+          pricePerMeter: {
+            min: '',
+            max: ''
+          },
+          areaOfBuilding: {
+            min: 10,
+            max: 500
+          },
           city: {},
           category: {},
-          price: undefined,
+          price: {
+            min: '',
+            max: ''
+          },
         }),
         rules: ref({})
       };
     },
+    // watch: {
+    //   'filter.price.min': function(newValue) {
+    //     const result = newValue.replace(/\D/g, "")
+    //       .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    //     this.$nextTick(() => this.filter.price.min = result);
+    //   }
+    // },
     methods: {
       onSelectCity (v) {
         this.filter.city = v;
@@ -158,9 +218,27 @@
         }
       },
       resetState () {
-        Object.keys(this.filter).forEach((key) => {
-          this.filter[key] = typeof this.filter[key] === 'object' ? {} : '';
-        })
+        this.filter = {
+          rooms: 0,
+          area: {
+            min: 10,
+            max: 500
+          },
+          pricePerMeter: {
+            min: '',
+            max: ''
+          },
+          areaOfBuilding: {
+            min: 10,
+            max: 500
+          },
+          city: {},
+          category: {},
+          price: {
+            min: '',
+            max: ''
+          },
+        }
       },
       initializeState () {
         const filterOptions = this.filterOptions ? this.filterOptions : {};
@@ -193,3 +271,8 @@
   });
   </script>
   
+  <style scoped>
+  /* .q-field--square .q-field__control {
+    border-radius: 50px !important;
+  } */
+  </style>

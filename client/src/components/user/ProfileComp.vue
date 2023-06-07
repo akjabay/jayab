@@ -175,7 +175,7 @@ export default defineComponent({
         } else {
 
           const result = await api.product.productFindUserProducts({
-            userId: this.user.id,
+            username,
             limit: this.pagination.limit,
             offset: this.pagination.offset,
             sorting: 'cteaedAt: -1',

@@ -12,14 +12,14 @@
         style="width: 600px"
       >
         <q-card-section>
-          <sub-title-comp :title="info.pid ? $t('updatePoint'): $t('addPoint')"></sub-title-comp>
+          <sub-title-comp :title="info.pid ? $t('updateProduct'): $t('addProduct')"></sub-title-comp>
         </q-card-section>
 
         <q-separator />
 
         <q-card-section class="q-pt-none scroll" style="max-height: 60vh">
           <div class="q-py-sm q-mx-sm">
-            <div class="col-12 text-center">
+            <div class="text-center">
               <filter-comp
                 v-on:on-change-filter="onChangeFilter"
                 :fetchedCategory="info.category"
@@ -32,7 +32,7 @@
                 class="q-mt-sm text-right"
                 v-model="info.name"
                 :rules="[rules.required]"
-                :label="$t('inputName')"
+                :label="$t('productTitle')"
                 :style="{ direction: $t('direction') }"
               ></q-input>
               <q-input
@@ -44,60 +44,74 @@
                 :label="$t('inputAddress')"
                 :style="{ direction: $t('direction') }"
               ></q-input>
+              <div class="row">
+                <q-input
+                  required
+                  outlined
+                  class="col-md-6 col-sm-6 col-xs-6 q-px-xs q-mt-sm text-right"
+                  v-model="info.area"
+                  type="number"
+                  :rules="[rules.required]"
+                  :label="$t('inputArea')"
+                  :style="{ direction: $t('direction') }"
+                ></q-input>
+                <q-input
+                  outlined
+                  class="col-md-6 col-sm-6 col-xs-6 q-px-xs q-mt-sm text-right"
+                  v-model="info.areaOfBuilding"
+                  type="number"
+                  :rules="[]"
+                  :label="$t('inputAreaOfBuilding')"
+                  :style="{ direction: $t('direction') }"
+                ></q-input>
+              </div>
+              <div class="col-md-12 col-sm-12 col-xs-12 text-right q-my-md">
+                <div class="text-normal">{{ $t('inputRooms') }}</div>
+                <q-slider
+                  v-model="info.rooms"
+                  class="ad-font-color"
+                  label-always
+                  :min="0"
+                  :max="5"
+                  :step="1"
+                />
+              </div>
               <q-input
                 required
-                outlined
-                class="q-mt-sm text-right"
-                v-model="info.area"
-                :rules="[rules.required]"
-                :label="$t('inputArea')"
-                :style="{ direction: $t('direction') }"
-              ></q-input>
-              <q-input
-                outlined
-                class="q-mt-sm text-right"
-                v-model="info.areaOfBuilding"
-                :rules="[]"
-                :label="$t('inputAreaOfBuilding')"
-                :style="{ direction: $t('direction') }"
-              ></q-input>
-              <q-input
-                outlined
-                class="q-mt-sm text-right"
-                v-model="info.rooms"
-                :rules="[]"
-                :label="$t('inputRooms')"
-                :style="{ direction: $t('direction') }"
-              ></q-input>
-              <q-input
-                required
-                outlined
+                filled
+                autogrow
                 class="q-mt-sm text-right"
                 v-model="info.ownerInfo"
                 :rules="[rules.required]"
                 :label="$t('inputOwnerInfo')"
                 :style="{ direction: $t('direction') }"
               ></q-input>
+              <div>
+                <sub-title-comp :title="$t('price')"></sub-title-comp>
+                <q-input
+                  required
+                  outlined
+                  class="q-mt-sm text-right"
+                  v-model="info.price"
+                  type="number"
+                  :rules="[]"
+                  :label="$t('inputPrice')"
+                  :style="{ direction: $t('direction') }"
+                ></q-input>
+                <q-input
+                  outlined
+                  class="q-mt-sm text-right"
+                  v-model="info.pricePerMeter"
+                  type="number"
+                  :rules="[]"
+                  :label="$t('inputPricePerMeter')"
+                  :style="{ direction: $t('direction') }"
+                ></q-input>
+              </div>
               <q-input
-                required
-                outlined
-                class="q-mt-sm text-right"
-                v-model="info.price"
-                :rules="[]"
-                :label="$t('inputPrice')"
-                :style="{ direction: $t('direction') }"
-              ></q-input>
-              <q-input
-                outlined
-                class="q-mt-sm text-right"
-                v-model="info.pricePerMeter"
-                :rules="[]"
-                :label="$t('inputPricePerMeter')"
-                :style="{ direction: $t('direction') }"
-              ></q-input>
-              <q-input
-                outlined
-                class="q-mt-sm text-right"
+                filled
+                class="q-mt-md text-right"
+                type="textarea"
                 v-model="info.details"
                 :rules="[]"
                 :label="$t('inputDatails')"
@@ -187,7 +201,7 @@ export default defineComponent({
         area: "",
         pricePerMeter: "",
         areaOfBuilding: "",
-        rooms: "",
+        rooms: 0,
         details: "",
         ownerInfo: "",
         category: {},
@@ -213,7 +227,9 @@ export default defineComponent({
     },
     onSetInfo(args = []) {
       const { marker } = args;
-      this.info = marker;
+      Object.keys(marker).forEach((key) => {
+        this.info[key] = marker[key];
+      })
       this.info.category = marker.categoryId && marker.categoryId.id ? marker.categoryId : marker.category;
       if (marker.images && marker.images.length > 0) {
         this.info.imageUrls = marker.images.map((img) => img.url);
@@ -225,7 +241,20 @@ export default defineComponent({
     onShaw(args = []) {
       const { ev = {} } = args;
       const { latlng = {} } = ev;
-      this.info = {};
+      this.info = {
+        pid: "",
+        latlng: "",
+        name: "",
+        address: "",
+        area: "",
+        pricePerMeter: "",
+        areaOfBuilding: "",
+        rooms: 0,
+        details: "",
+        ownerInfo: "",
+        category: {},
+        price: undefined,
+      };
       this.imageBoxs = [];
       this.images = []
       this.info.latlng = latlng.lat + ',' + latlng.lng;

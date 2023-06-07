@@ -11,6 +11,8 @@ export default {
   add: 'add',
   addPoint: 'add Point',
   updatePoint: 'update Point',
+  addProduct: 'add product',
+  updateProduct: 'update product',
   loginOrSignup: 'Login Or Signup',
   ok: 'ok',
   home: 'home',
@@ -59,6 +61,8 @@ export default {
   setCityIsRequired: 'setCityIsRequired',
   informationIsWrong: 'informationIsWrong',
   copyProfileURL: 'copyProfileURL',
+  productTitle: 'product title',
+  price: 'price',
 
   emptyList: 'Nothing is Here!',
 
@@ -98,10 +102,15 @@ export default {
   tryAgain: 'Try Again',
   back: 'back',
   inputArea: 'area',
+  totalArea: 'total area',
   inputOwnerInfo: 'owner info',
   inputPrice: 'price',
   addImage: 'add image',
   chooseCity: 'choose city',
+  thousandToman: 'thousand toman',
+  max: 'max',
+  min: 'min',
+  total: 'total',
 
   manageAccount: 'Manage Account',
   account: 'Account',

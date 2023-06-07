@@ -13,6 +13,8 @@ export default {
   add: 'افزودن',
   addPoint: 'افزودن مختصات',
   updatePoint: 'آپدیت مختصات',
+  addProduct: 'افزودن ملک',
+  updateProduct: 'آپدیت ملک',
   loginOrSignup: 'ورود یا ثبت نام',
   ok: 'باشه',
   home: 'خانه',
@@ -60,6 +62,8 @@ export default {
   setCityIsRequired: 'ابتدا شهر خود را انتخاب کنید',
   informationIsWrong: 'اطلاعات نادرست است. یا کاربری با این مشخصات موجود نیست!',
   copyProfileURL: 'کپی آدرس حساب',
+  productTitle: 'عنوان ملک',
+  price: 'قیمت',
 
   emptyList: 'لیست خالی است!',
 
@@ -100,6 +104,7 @@ export default {
   back: 'برگشت',
   reset: 'پاک کردن',
   inputArea: 'مساحت',
+  totalArea: 'مساحت کل',
   inputOwnerInfo: 'مشخصات مالک',
   inputPrice: 'قیمت',
   addImage: 'افزودن عکس',
@@ -125,6 +130,10 @@ export default {
   read: 'خواندن',
   open: 'باز کردن',
   invisible: 'غیرقابل مشاهده',
+  thousandToman: 'هزار تومان',
+  max: 'حداکثر',
+  min: 'حداقل',
+  total: 'کل',
 
   product: 'ملک',
   products: 'املاک',

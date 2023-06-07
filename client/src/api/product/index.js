@@ -236,12 +236,14 @@ export default {
       limit = '',
       offset = '',
       sorting = '',
-      userId = ''
+      userId = '',
+      username = ''
     } = args;
     return request.post("/graphql", {
       query: `query {
           productFindUserProducts (query: {
                 userId: "${userId}"
+                username: "${username}"
                 sorting: "${sorting}"
                 ${limit && offset ? `pagination: {
                   limit: ${limit}

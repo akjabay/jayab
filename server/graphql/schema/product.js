@@ -57,6 +57,7 @@ input ProductInput {
 input ProductFindInput {
     ids: [ID]
     userId: ID
+    username: String
     pagination: Pagination
     sorting: String
     latlng: String
