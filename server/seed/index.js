@@ -3,27 +3,27 @@ const bcrypt = require("bcrypt");
 
 const permissions = [
 
-    { id: "6469e9d6c690c000825b94ba", codename: 'write user', persian_codename: 'افزودن کاربر' },
-    { id: "6469e9d6c690c000825b92b0", codename: 'read user', persian_codename: 'خواندن کاربر' },
-    { id: "6469e9d6c690c000825b95ba", codename: 'write product', persian_codename: 'افزودن محصول' },
-    { id: "6469e9d6c690c000825b92b2", codename: 'read product', persian_codename: 'خواندن محصول' },
-    { id: "6469e9d6c690c000825b96ba", codename: 'write post', persian_codename: 'افزودن پست' },
-    { id: "6469e9d6c690c000825b92b4", codename: 'read post', persian_codename: 'خواندن پست' },
-    { id: "6469e9d6c690c000825b97ba", codename: 'write ticket', persian_codename: 'افزودن پرسش' },
-    { id: "6469e9d6c690c000825b92b6", codename: 'read ticket', persian_codename: 'خواندن پرسش' },
-    { id: "6469e9d6c690c000825b98ba", codename: 'write slide', persian_codename: 'افزودن اسلاید' },
-    { id: "6469e9d6c690c000825b92b8", codename: 'read slide', persian_codename: 'خواندن اسلاید' },
-    { id: "6469e9d6c690c000825b93ba", codename: 'write category', persian_codename: 'افزودن دسته بندی' },
-    { id: "6469e9d6c690c000825b92ba", codename: 'read category', persian_codename: 'خواندن دسته بندی' },
-    { id: "6469e9d6c690c000825b92bb", codename: 'write comment', persian_codename: 'افزودن نظر' },
-    { id: "6469e9d6c690c000825b92bc", codename: 'read comment', persian_codename: 'خواندن نظر' },
-    { id: "6469e9d6c690c000825b92bd", codename: 'read report', persian_codename: 'گزارش ها' },
+    { _id: "6469e9d6c690c000825b94ba", codename: 'write user', persian_codename: 'افزودن کاربر' },
+    { _id: "6469e9d6c690c000825b92b0", codename: 'read user', persian_codename: 'خواندن کاربر' },
+    { _id: "6469e9d6c690c000825b95ba", codename: 'write product', persian_codename: 'افزودن محصول' },
+    { _id: "6469e9d6c690c000825b92b2", codename: 'read product', persian_codename: 'خواندن محصول' },
+    { _id: "6469e9d6c690c000825b96ba", codename: 'write post', persian_codename: 'افزودن پست' },
+    { _id: "6469e9d6c690c000825b92b4", codename: 'read post', persian_codename: 'خواندن پست' },
+    { _id: "6469e9d6c690c000825b97ba", codename: 'write ticket', persian_codename: 'افزودن پرسش' },
+    { _id: "6469e9d6c690c000825b92b6", codename: 'read ticket', persian_codename: 'خواندن پرسش' },
+    { _id: "6469e9d6c690c000825b98ba", codename: 'write slide', persian_codename: 'افزودن اسلاید' },
+    { _id: "6469e9d6c690c000825b92b8", codename: 'read slide', persian_codename: 'خواندن اسلاید' },
+    { _id: "6469e9d6c690c000825b93ba", codename: 'write category', persian_codename: 'افزودن دسته بندی' },
+    { _id: "6469e9d6c690c000825b92ba", codename: 'read category', persian_codename: 'خواندن دسته بندی' },
+    { _id: "6469e9d6c690c000825b92bb", codename: 'write comment', persian_codename: 'افزودن نظر' },
+    { _id: "6469e9d6c690c000825b92bc", codename: 'read comment', persian_codename: 'خواندن نظر' },
+    { _id: "6469e9d6c690c000825b92bd", codename: 'read report', persian_codename: 'گزارش ها' },
 
 ];
 
 const categories = [
     {
-        id: "64662f14e3b9db8deea7310b",
+        _id: "6481a3d7b5563706039ad7e6",
         parent_id: null,
         name: "root",
         fa_name: "دسته بندی اصلی",
@@ -33,7 +33,7 @@ const categories = [
         full_fa_name: ""
     },
     // {
-    //     id: "64662f14e3b9db8deea7310a",
+    //     _id: "64662f14e3b9db8deea7310a",
     //     parent_id: "root",
     //     name: "product",
     //     fa_name: "محصولات",
@@ -43,7 +43,7 @@ const categories = [
     //     full_fa_name: ""
     // },
     {
-        id: "64662f14e3b9db8deea7310c",
+        _id: "6481a3d7b5563706039ad7e7",
         parent_id: "root",
         name: "real-estate",
         en_name: "real estate",
@@ -52,7 +52,7 @@ const categories = [
         full_fa_name: ""
     },
     {
-        id: "64662f14e3b9db8deea7310d",
+        _id: "6481a3d7b5563706039ad7e8",
         parent_id: "real-estate",
         name: "residential-rent",
         en_name: "residential rent",
@@ -61,7 +61,7 @@ const categories = [
         full_fa_name: ""
     },
     {
-        id: "64662f14e3b9db8deea7310e",
+        _id: "6481a3d7b5563706039ad7e9",
         parent_id: "real-estate",
         name: "residential-sell",
         en_name: "residential sell",
@@ -70,7 +70,7 @@ const categories = [
         full_fa_name: ""
     },
     {
-        id: "64662f14e3b9db8deea7310f",
+        _id: "6481a3d7b5563706039ad7ea",
         parent_id: "real-estate",
         name: "commercial-sell",
         en_name: "commercial sell",
@@ -79,7 +79,7 @@ const categories = [
         full_fa_name: ""
     },
     {
-        id: "64662f14e3b9db8deea73110",
+        _id: "6481a3d7b5563706039ad7eb",
         parent_id: "real-estate",
         name: "partnership",
         en_name: "partnership",
@@ -88,7 +88,7 @@ const categories = [
         full_fa_name: ""
     },
     {
-        id: "64662f14e3b9db8deea73111",
+        _id: "6481a3d7b5563706039ad7ec",
         parent_id: "real-estate",
         name: "presell",
         en_name: "presell",
@@ -97,7 +97,7 @@ const categories = [
         full_fa_name: ""
     },
     {
-        id: "64662f14e3b9db8deea73112",
+        _id: "6481a3d7b5563706039ad7ed",
         parent_id: "real-estate",
         name: "commercial-rent",
         en_name: "commercial rent",
@@ -106,7 +106,7 @@ const categories = [
         full_fa_name: ""
     },
     {
-        id: "64662f14e3b9db8deea73113",
+        _id: "6481a3d7b5563706039ad7ee",
         parent_id: "real-estate",
         name: "temporary-rent",
         en_name: "temporary rent",
@@ -115,7 +115,7 @@ const categories = [
         full_fa_name: ""
     },
     {
-        id: "64662f14e3b9db8deea73114",
+        _id: "6481a3d7b5563706039ad7ef",
         parent_id: "real-estate",
         name: "real-estate",
         en_name: "real estate",
@@ -127,7 +127,7 @@ const categories = [
 
 const services = [
     {
-        id: "646b84fef37028cf327a458b",
+        _id: "646b84fef37028cf327a458b",
         codename : 'plus',
         persian_codename : 'پلاس',
         accesses: 'write product',
@@ -137,7 +137,7 @@ const services = [
 
 const plans = [
     {
-        id: "646b2ea42a5a12ef997229a1",
+        _id: "646b2ea42a5a12ef997229a1",
         name: 'اشتراک طلایی',
         description: 'فعال سازی طلایی سرویس',
         featureDescriptions: 'فعال سازی طلایی سرویس',
@@ -156,7 +156,7 @@ const plans = [
         metadata: {},
     },
     {
-        id: "646b2ea42a5a12ef997229a2",
+        _id: "646b2ea42a5a12ef997229a2",
         name: 'اشتراک نقره ای',
         description: 'فعال سازی نقره ای سرویس',
         featureDescriptions: 'فعال سازی نقره ای سرویس',
@@ -192,6 +192,7 @@ module.exports.run = async () => {
     const dbUsers = await db["User"].find();
     const dbPermissions = await db["Permission"].find();
     if (dbPermissions.length !== permissions.length) {
+        await db["Permission"].deleteMany();
         await db["Permission"].insertMany(permissions);
     }
     if (dbUsers.length === 0) {
@@ -204,10 +205,10 @@ module.exports.run = async () => {
         await db["User"].insertMany(users);
     }
     const dbCategories = await db["Category"].find();
-    // if (dbCategories.length !== categories.length) {
+    if (dbCategories.length !== categories.length) {
         await db["Category"].deleteMany();
         await db["Category"].insertMany(categories);
-    // }
+    }
     const dbServices = await db["Service"].find();
     if (dbServices.length !== services.length) {
         await db["Service"].deleteMany();

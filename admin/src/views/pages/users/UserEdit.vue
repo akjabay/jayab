@@ -262,9 +262,9 @@ export default {
     },
 
     fetchUser: async function () {
-        const username = this.$route.params.userId;
+        const userId = this.$route.params.userId;
         try {
-          const result = await api.user.userFind({ username })
+          const result = await api.user.userFind({ userId })
           if (result.data.data.errors) {
             this.alert_msg = result.data.data.errors[0].message;
           } else if (result.data.data.userFind) {

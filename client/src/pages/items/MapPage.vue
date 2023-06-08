@@ -103,7 +103,7 @@ export default defineComponent({
   },
   mounted () {
     // this.$nextTick(function () {
-      this.fetchData();
+      // this.fetchData();
     // });
   },
   computed: {

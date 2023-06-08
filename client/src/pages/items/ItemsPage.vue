@@ -65,6 +65,9 @@ export default defineComponent({
       if (this.view !== next) {
         this.view = this.view === 'list' ? 'map' : 'list';
         this.$router.replace('/items/' + this.view);
+        this.$nextTick(function () {
+          this.fetchData();
+        })
       }
     },
     fetchData () {
@@ -80,6 +83,14 @@ export default defineComponent({
   mounted () {
     const view = this.$route.params.view;
     ['list', 'map'].includes(view) ? this.view = view : '';
+    const filterItems = this.$route.query.filterOptions;
+    if (filterItems) {
+      const parsedVals = JSON.parse(filterItems);
+      Object.keys(parsedVals).forEach((key) => {
+        this.filterOptions[key] = parsedVals[key];
+      });
+    }
+    this.fetchData();
   }
 });
 </script>

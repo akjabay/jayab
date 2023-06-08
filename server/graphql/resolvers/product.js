@@ -116,15 +116,16 @@ module.exports = {
         const creator = req.creator;
         const input = args.input ? args.input : args;
         const params = input.id ? { _id: input.id } : { pid: input.pid };
+        const updateParams = {};
 
-        const images = input.imageUrls
-            ? input.imageUrls.split(',').map((iu) => { return { url: iu } }) : [];
-
-        console.log(input, 'input')
+        if (input.imageUrls && input.imageUrls.split(',').length > 0) {
+            updateParams.images = input.imageUrls.split(',').map((iu) => { return { url: iu } });
+            updateParams.thumbnail = updateParams.images && updateParams.images[0] ? updateParams.images[0].url : undefined ;
+        }
 
         return await db["Product"].findOneAndUpdate(
             { ...params, userId: creator },
-            { ...input, images, thumbnail: images && images[0] ? images[0].url : undefined },
+            { ...input, ...updateParams },
             { new: true }
         );
     },
@@ -176,11 +177,11 @@ module.exports = {
             ? matchParams.categoryId = new mongoose.Types.ObjectId(query.categoryId)
             : '';
 
-        query.area && query.area !== ','  ? matchParams.area = query.area : '';
-        query.pricePerMeter && query.pricePerMeter !== ','  ? matchParams.pricePerMeter = query.pricePerMeter : '';
-        query.areaOfBuilding && query.areaOfBuilding !== ','  ? matchParams.areaOfBuilding = query.areaOfBuilding : '';
-        query.rooms && query.rooms !== ','  ? matchParams.rooms = query.rooms : '';
-        query.price && query.price !== ','  ? matchParams.price = query.price : '';
+        query.area && query.area !== ',' ? matchParams.area = query.area : '';
+        query.pricePerMeter && query.pricePerMeter !== ',' ? matchParams.pricePerMeter = query.pricePerMeter : '';
+        query.areaOfBuilding && query.areaOfBuilding !== ',' ? matchParams.areaOfBuilding = query.areaOfBuilding : '';
+        query.rooms && query.rooms !== ',' ? matchParams.rooms = query.rooms : '';
+        query.price && query.price !== ',' ? matchParams.price = query.price : '';
 
         matchParams.area && matchParams.area.includes(',') && matchParams.area.split(',')[0]
             ? matchParams.area = { '$gte': +matchParams.area.split(',')[0], '$lte': +matchParams.area.split(',')[1] }
@@ -194,8 +195,6 @@ module.exports = {
         matchParams.price && matchParams.price.includes(',') && matchParams.price.split(',')[0]
             ? matchParams.price = { '$gte': +matchParams.price.split(',')[0], '$lte': +matchParams.price.split(',')[1] }
             : '';
-
-            console.log(matchParams, 'matchParams')
 
         // for only view publics
         if (!user || (user && user.is_superuser !== 1)) {
@@ -257,6 +256,7 @@ module.exports = {
                 .find({ ...matchParams })
                 .count()
                 .exec();
+
             return {
                 hits: products,
                 pagination: {
@@ -296,6 +296,7 @@ module.exports = {
                 userId: targetUser.id,
                 ...productParams
             })
+            .populate('userId categoryId')
             .skip(pagination.offset)
             .limit(pagination.limit);
         const total = await db["Product"]
@@ -402,6 +403,7 @@ module.exports = {
                     userId: creator,
                     ...params
                 })
+                .populate('userId categoryId')
                 .sort(query.sorting)
                 .skip(pagination.offset)
                 .limit(pagination.limit)

@@ -311,6 +311,8 @@ export default {
       imageUrls,
       categoryId,
     } = args;
+
+    const modifiedDetails = details.split('\n').join('- ');
     return request.post("/graphql", {
       query: `mutation {
           productCreate (input: {
@@ -324,7 +326,7 @@ export default {
             ${pricePerMeter ? `pricePerMeter: "${pricePerMeter}"` : ''}
             ${areaOfBuilding ? `areaOfBuilding: "${areaOfBuilding}"` : ''}
             ${rooms ? `rooms: ${rooms}` : ''}
-            ${details ? `details: "${details}"` : ''}
+            ${details ? `details: "${modifiedDetails}"` : ''}
             ${categoryId ? `categoryId: "${categoryId}"` : ''}
           }) {
             id

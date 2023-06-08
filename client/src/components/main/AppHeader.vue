@@ -128,6 +128,14 @@
         </div>
       </div>
     </q-toolbar>
+
+    <q-banner outline v-for="(alert, i) in alerts" :key="i" inline-actions class="text-white bg-red">
+      <q-icon size="sm" name="fa fa-exclamation-circle " />
+      {{ alert.message }}
+      <template v-slot:action>
+        <q-btn @click="onConfirmAlert" class="ad-font-color bg-white" :label="$t('ok')" />
+      </template>
+    </q-banner>
   </q-header>
 </template>
 
@@ -148,6 +156,7 @@ export default defineComponent({
   setup() {
     return {
       isBackExists: ref(false),
+      alerts: ref([])
     };
   },
   methods: {
@@ -187,12 +196,44 @@ export default defineComponent({
         }
       }
     },
+    async getAlerts () {
+      try {
+        // get alerts
+        const noAlert = localStorage.getItem('noAlert');
+
+        if (!noAlert) {
+          this.alerts.push({
+            message: 'ثبت نام و فعال سازی 100 مشاور املاک اول رایگان است',
+            expires: new Date('1/12/2023').getTime()
+          })
+        }
+      } catch (error) {
+        this.$q.notify({
+          type: "negative",
+          message: this.$t("failed"),
+          caption: this.$t("failed"),
+        });
+      }
+    },
+    async onConfirmAlert () {
+      try {
+        localStorage.setItem('noAlert', true);
+        this.alerts = [];
+      } catch (error) {
+        this.$q.notify({
+          type: "negative",
+          message: this.$t("failed"),
+          caption: this.$t("failed"),
+        });
+      }
+    }
   },
   computed: {
     ...mapState(useAuthStore, ["isUserLoggedIn", "user"]),
   },
   mounted () {
     // this.fetchData();
+    this.getAlerts();
     this.isBackExists =
       this.$router.options &&
       this.$router.options.history &&

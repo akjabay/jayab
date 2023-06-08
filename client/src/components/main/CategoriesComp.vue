@@ -1,5 +1,5 @@
 <template>
-  <div class="q-px-xl q-mx-lg">
+  <div class="">
     <div v-if="categories && categories.length > 0">
       <div class="row justify-center">
         <div

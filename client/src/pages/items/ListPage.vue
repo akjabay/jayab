@@ -99,7 +99,7 @@ export default defineComponent({
     ...mapState(useAuthStore, ["user"]),
   },
   mounted () {
-    this.fetchData();
+    // this.fetchData();
   }
 });
 </script>

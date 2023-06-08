@@ -1,5 +1,6 @@
 <template>
   <q-card flat class="q-ma-sm ad-fixed-card ad-box-bordered">
+    <!-- <user-small-comp class="col-6" :user="product.userId"></user-small-comp> -->
     <q-img
       v-if="product && product.images.length > 0"
       class="text-pointer"
@@ -23,7 +24,7 @@
         {{ product.name }}
       </a>
       <!-- <date-comp :date="product.createdAt"></date-comp> -->
-      <!-- <category-comp :category="product.categoryId"></category-comp> -->
+      <category-comp class="q-my-none" :category="product.categoryId"></category-comp>
 
       <div
         class="col-5"
@@ -75,7 +76,8 @@
 
 <script>
 import { defineComponent } from "vue";
-// import CategoryComp from "/src/components/main/CategoryComp.vue";
+// import UserSmallComp from "/src/components/user/UserSmallComp.vue";
+import CategoryComp from "/src/components/main/CategoryComp.vue";
 // import DateComp from "/src/components/main/DateComp.vue";
 // import ActionsComp from "/src/components/main/ActionsComp.vue";
 
@@ -85,7 +87,8 @@ export default defineComponent({
     product: Object,
   },
   components: {
-    // CategoryComp,
+    // UserSmallComp
+    CategoryComp,
     // DateComp,
     // ActionsComp,
   },
