@@ -2,10 +2,18 @@
   <q-page>
     <div>
       <div class="row">
+        <q-btn-group push class="q-ma-xs">
+           <q-btn :outline="view === 'table'" :class="view === 'table' ? 'ad-font-color' : ''" @click="onClickToView('table')">
+            <q-icon size="1.3em" name="fa fa-list" />
+           </q-btn>
+           <q-btn :outline="view === 'list'" :class="view === 'list' ? 'ad-font-color' : ''" @click="onClickToView('list')">
+            <q-icon size="1.3em" name="fa fa-table-columns" />
+           </q-btn>
+        </q-btn-group>
         <q-space></q-space>
         <q-btn @click="filtering = !filtering" outline class="q-ma-xs ad-font-color" no-caps>
-          <q-icon class="" size="1.5em" v-if="filtering" name="fas fa-caret-up" />
-          <q-icon class="" size="1.5em" v-else name="fa fa-filter" />
+          <q-icon class="" size="1.3em" v-if="filtering" name="fas fa-caret-up" />
+          <q-icon class="" size="1.3em" v-else name="fa fa-filter" />
         </q-btn>
       </div>
       
@@ -23,7 +31,12 @@
     <div
       v-if="products.length > 0"
     >
+    <div v-if="view === 'table'">
+      <table-comp :items="products" v-on:on-update-items="fetchData({ page: currentPage })"></table-comp>
+    </div>
+    <div v-if="view === 'list'">
       <list-comp :items="products"></list-comp>
+    </div>
       <pagination-comp
         v-on:select-page="onChangePage"
         :currentPage="currentPage"
@@ -41,6 +54,7 @@
 import { defineComponent, ref } from "vue";
 import FilterComp from "/src/components/main/FilterComp.vue";
 import ListComp from "/src/components/list/ListComp.vue";
+import TableComp from "/src/components/list/TableComp.vue";
 import PaginationComp from "/src/components/common/PaginationComp.vue";
 import EmptyComp from "/src/components/main/EmptyComp.vue";
 import { useAuthStore } from "src/stores/auth";
@@ -61,15 +75,22 @@ export default defineComponent({
       }),
       loaded: ref(false),
       filtering: ref(false),
+      view: ref('table')
     }
   },
   components: {
     FilterComp,
     ListComp,
+    TableComp,
     PaginationComp,
     EmptyComp,
   },
   methods: {
+    onClickToView (next) {
+      if (this.view !== next) {
+        this.view = this.view === 'list' ? 'table' : 'list';
+      }
+    },
     onResetFilter () {
       this.filterOptions = {};
       this.$refs.filterComp.resetState();
@@ -83,14 +104,21 @@ export default defineComponent({
     },
     async fetchData (args = []) {
       try {
+        this.loaded = false;
         const { page } = args;
         if (page) {
           this.pagination.offset = (page - 1) * this.pagination.limit;
         }
         const params = {};
-        Object.keys(this.filterOptions).forEach((key) => {
-          params[key] = this.filterOptions[key];
-        });
+        if (this.filterOptions && typeof this.filterOptions === 'object') {
+          Object.keys(this.filterOptions).forEach((key) => {
+            if (typeof this.filterOptions[key] === 'object' && (Object.keys(this.filterOptions[key]).includes('min'))) {
+              params[key] = `${this.filterOptions[key].min},${this.filterOptions[key].max}`
+            } else {
+              params[key] = this.filterOptions[key];
+            }
+          });
+        }
         const result = await api.product.productFindMyProducts({
           limit: this.pagination.limit,
           offset: this.pagination.offset,
@@ -109,6 +137,7 @@ export default defineComponent({
         this.loaded = true;
 
       } catch (error) {
+        this.loaded = true;
         console.log(error);
         this.$q.notify({
           type: "negative",
@@ -116,6 +145,7 @@ export default defineComponent({
           caption: this.$t("failed"),
         });
       }
+      this.loaded = true;
     },
   },
   computed: {

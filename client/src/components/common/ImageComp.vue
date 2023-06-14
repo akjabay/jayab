@@ -17,7 +17,7 @@
       ]
       "
       style="border-radius: 5px 5px 0 0;"
-      :src="$api.getImageUrl($q.screen, link, isThumb, isCard)"
+      :src="link ? $api.getImageUrl($q.screen, link, isThumb, isCard) : 'no-image.svg'"
     />
     <div class="q-pt-md">
       {{ isBlog ? $t("image") + " (" + (index ? index : 1) + ")" : "" }}
@@ -29,7 +29,7 @@
         </q-card-section>
         <img
           width="970px"
-          :src="$api.getImageUrl($q.screen, link, false, false, true)"
+          :src="link ? $api.getImageUrl($q.screen, link, false, false, true) : 'no-image.svg'"
         />
         <q-card-actions align="right">
           <q-btn flat label="OK" color="primary" v-close-popup />

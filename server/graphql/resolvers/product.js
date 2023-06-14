@@ -119,8 +119,9 @@ module.exports = {
         const updateParams = {};
 
         if (input.imageUrls && input.imageUrls.split(',').length > 0) {
-            updateParams.images = input.imageUrls.split(',').map((iu) => { return { url: iu } });
-            updateParams.thumbnail = updateParams.images && updateParams.images[0] ? updateParams.images[0].url : undefined ;
+            const images = input.imageUrls.split(',').map((iu) => { return { url: iu } })
+            updateParams.images = images;
+            updateParams.thumbnail = images && images[0] ? images[0].url : undefined ;
         }
 
         return await db["Product"].findOneAndUpdate(
@@ -199,6 +200,7 @@ module.exports = {
         // for only view publics
         if (!user || (user && user.is_superuser !== 1)) {
             matchParams.isPublic = true;
+            matchParams.status = { $ne: "deleted" };
         }
 
         if (query.latlng) {
@@ -285,6 +287,7 @@ module.exports = {
         // for only view publics
         if (!user || (user && user.is_superuser !== 1)) {
             productParams.isPublic = true;
+            productParams.status = { $ne: "deleted" };
         }
 
         const targetUser = await db["User"].findOne({

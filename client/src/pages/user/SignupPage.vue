@@ -17,7 +17,7 @@
               class="q-mt-sm"
               v-model="name"
               :rules="[rules.required, rules.min3]"
-              :label="$t('inputName')"
+              :label="$t('inputName')+'('+$t('realStateName')+')'"
             ></q-input>
             <q-input
               outlined
@@ -34,7 +34,11 @@
               v-model="phone"
               :rules="[rules.required, rules.is11]"
               :label="$t('inputPhone')"
-            ></q-input>
+            >
+            <template v-slot:hint>
+              0900-000-00-00
+            </template>
+          </q-input>
             <q-input
               outlined
               class="q-mt-sm"
@@ -70,11 +74,16 @@
             <q-card-section :style="'direction: ' + $t('direction')">
               <vue-countdown :time="countDownTime" v-slot="{ minutes, seconds }">
                 <span class="text-h5 ad-font-color">
-                  {{ `${minutes}`.length == 2 ? minutes : "0" + minutes }}:
-                  {{ `${seconds}`.length == 2 ? seconds : "0" + seconds }}
+                  {{ `${seconds}`.length == 2 ? seconds : "0" + seconds }}:
+                  {{ `${minutes}`.length == 2 ? minutes : "0" + minutes }}
                 </span>
               </vue-countdown>
             </q-card-section>
+
+            <q-card-section>
+              کد شما <span class="text-h6 text-bold">12321</span> است
+            </q-card-section>
+
             <q-input
               outlined
               class="q-mt-sm"
@@ -108,7 +117,7 @@
               :loading="loading"
               class="q-mx-xs"
               color="primary"
-              @click="register, (disable = true)"
+              @click="register"
               >{{ $t('tryAgain') }}</q-btn
             >
           </q-card>

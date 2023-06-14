@@ -12,30 +12,33 @@
       </q-toolbar-title>
 
       <div class="row" v-if="$q.screen.gt.xs">
-        <div
+        <q-btn
+          flat
           class="ad-secondary-btn q-pa-sm q-mx-sm pointer text-body1"
           :class="isRouteActive('/')"
-          @click="$router.push('/')"
+          to="/"
         >
           {{ $t("home") }}
-        </div>
-        <div
+        </q-btn>
+        <q-btn
+          flat
           class="ad-secondary-btn q-pa-sm q-mx-sm pointer text-body1"
           :class="isRouteActive('/items', ['/items/list', '/items/map'])"
-          @click="$router.push('/items/list')"
+          to="/items/list"
         >
           {{ $t("publicProducts") }}
-        </div>
-        <div
-        v-if="user && (user.permissions.find(
+        </q-btn>
+        <q-btn
+          flat
+          v-if="user && (user.permissions.find(
             (p) => p.codename === 'write product'
           ) || user.is_superuser === 1)"
           class="ad-secondary-btn q-pa-sm q-mx-sm pointer text-body1"
           :class="isRouteActive('/accounts/plus', ['/accounts/plus/manage-map', '/accounts/plus/manage-list'])"
-          @click="$router.push('/accounts/plus')"
+          to="/accounts/plus"
         >
           {{ $t("manage") }}
-        </div>
+        </q-btn>
       </div>
 
       <q-space v-if="$q.screen.gt.xs" />
@@ -169,8 +172,12 @@ export default defineComponent({
       this.$router.push("/accounts/login");
     },
     isRouteActive(route, routes = []) {
-      const currentRoute = this.$route.matched[1].path;
-      return currentRoute == route || routes.includes(this.$route.path) ? "active" : "";
+      if (this.$route.matched[1] && this.$route.matched[1].path) {
+        const currentRoute = this.$route.matched[1].path;
+        return currentRoute == route || routes.includes(this.$route.path) ? "active" : "";
+      } else {
+        return "";
+      }
     },
 
     async fetchData() {

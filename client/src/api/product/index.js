@@ -212,6 +212,7 @@ export default {
                       avatar_url
                     }
                     createdAt
+                    thumbnail
                     categoryId {
                       id
                       name
@@ -221,6 +222,8 @@ export default {
                       icon_url_fa
                       parent_id
                     }
+                    status
+                    estate
                 }
                 pagination {
                     limit
@@ -310,6 +313,7 @@ export default {
       price,
       imageUrls,
       categoryId,
+      status = ""
     } = args;
 
     const modifiedDetails = details.split('\n').join('- ');
@@ -328,6 +332,7 @@ export default {
             ${rooms ? `rooms: ${rooms}` : ''}
             ${details ? `details: "${modifiedDetails}"` : ''}
             ${categoryId ? `categoryId: "${categoryId}"` : ''}
+            ${status ? `status: "${status}"` : ''}
           }) {
             id
           }
@@ -364,7 +369,9 @@ export default {
       price,
       imageUrls,
       categoryId,
-      isPublic = undefined
+      isPublic = undefined,
+      status = '',
+      estate = '',
     } = args;
     return request.post("/graphql", {
       query: `mutation {
@@ -383,6 +390,8 @@ export default {
                   ${rooms ? `rooms: ${rooms}` : ''}
                   ${details ? `details: "${details}"` : ''}
                   ${categoryId ? `categoryId: "${categoryId}"` : ''}
+                  ${status ? `status: "${status}"` : ''}
+                  ${estate ? `estate: "${estate}"` : ''}
                   ${isPublic !== undefined ? `isPublic: ${isPublic}` : ''}
                 }) {
                   id

@@ -77,12 +77,11 @@
                 />
               </div>
               <q-input
-                required
                 filled
                 autogrow
                 class="q-mt-sm text-right"
                 v-model="info.ownerInfo"
-                :rules="[rules.required]"
+                :rules="[]"
                 :label="$t('inputOwnerInfo')"
                 :style="{ direction: $t('direction') }"
               ></q-input>
@@ -158,6 +157,27 @@
               </q-card>
             </div>
           </div>
+
+          <sub-title-comp :title="$t('manage')"></sub-title-comp>
+
+          <q-select
+            outlined
+            class="q-mt-md text-right"
+            v-model="info.status"
+            :options="stateOpts"
+            :label="$t('state')"
+            emit-value
+            map-options
+          />
+          <q-select
+            outlined
+            class="q-mt-md text-right"
+            v-model="info.estate"
+            :options="estateOpts"
+            :label="$t('estate')"
+            emit-value
+            map-options
+          />
         </q-card-section>
 
         <q-separator />
@@ -168,7 +188,7 @@
         >
           <q-btn color="red" flat :label="$t('cancel')" v-close-popup />
           <q-space />
-          <q-btn color="primary" :label="$t('submit')" @click="onSubmit" />
+          <q-btn class="ad-primary-btn" :label="$t('submitChanges')" @click="onSubmit" />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -191,6 +211,15 @@ export default defineComponent({
   },
   props: {},
   setup() {
+    const stateOpts = [
+      { value: 'active', label: 'فعال' },
+      { value: 'deleted', label: 'حذف شده' },
+    ];
+    const estateOpts = [
+      { value: 'inRent', label: 'اجاره شده' },
+      { value: 'sold', label: 'فروخته شده' },
+      { value: 'notDetermined', label: 'نامشخص' },
+    ];
     return {
       dialog: ref(false),
       info: ref({
@@ -206,11 +235,15 @@ export default defineComponent({
         ownerInfo: "",
         category: {},
         price: undefined,
+        status: "",
+        estate: "",
       }),
       filterOptions: ref({}),
       rules: ref({}),
       imageBoxs: ref([]),
       images: ref([]),
+      stateOpts,
+      estateOpts,
     };
   },
   methods: {
@@ -227,6 +260,8 @@ export default defineComponent({
     },
     onSetInfo(args = []) {
       const { marker } = args;
+      this.images = [];
+      this.imageBoxs = [];
       Object.keys(marker).forEach((key) => {
         this.info[key] = marker[key];
       })
@@ -254,6 +289,8 @@ export default defineComponent({
         ownerInfo: "",
         category: {},
         price: undefined,
+        status: "",
+        estate: "",
       };
       this.imageBoxs = [];
       this.images = []

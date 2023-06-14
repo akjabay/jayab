@@ -33,8 +33,8 @@ module.exports = {
             : email.split('@')[0] + email.split('@')[1].slice(0, 1);
 
         // validation code for email or phone
-        // const code = 12345;
-        const code = Math.floor(Math.random() * 90000) + 10000;
+        const code = 12321;
+        // const code = Math.floor(Math.random() * 90000) + 10000;
         const params = {
             code: code,
             name: name,
@@ -56,17 +56,17 @@ module.exports = {
         if (exUser && exUser.status_auth === "inactive") {
             params.password = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
 
-            //send code via sms or email
-            const res = await sendMail({ email, subject: 'Verification Code AvanDaneh.com', text: `${code}` });
-            if (!res.success) {
-                errors.push({
-                    message: "email not sent!",
-                });
-                const error = new Error("email not sent!");
-                error.data = errors;
-                error.code = 422;
-                throw error;
-            }
+            // //send code via sms or email
+            // const res = await sendMail({ email, subject: 'Verification Code AvanDaneh.com', text: `${code}` });
+            // if (!res.success) {
+            //     errors.push({
+            //         message: "email not sent!",
+            //     });
+            //     const error = new Error("email not sent!");
+            //     error.data = errors;
+            //     error.code = 422;
+            //     throw error;
+            // }
 
             return await db["User"].findByIdAndUpdate(exUser.id, params, { new: true });
         } else if (exUser) {
@@ -287,7 +287,8 @@ module.exports = {
 
         const updatedUser = await db["User"]
             .findOneAndUpdate(params, input, { new: true })
-            .populate("permissions subscriptions.planId subscriptions.serviceId");
+            .populate("permissions subscriptions.planId subscriptions.serviceId")
+            .exec();
         updatedUser.phone ? updatedUser.phone = decrypt(updatedUser.phone): '';
         return updatedUser;
     },

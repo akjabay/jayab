@@ -63,6 +63,11 @@ export default {
   copyProfileURL: 'copyProfileURL',
   productTitle: 'product title',
   price: 'price',
+  realStateName: 'realStateName',
+  meter: 'meter',
+  areaOfBuilding: 'area of building',
+  passwordIsNotMatch: 'passwordIsNotMatch',
+  title: 'title',
 
   emptyList: 'Nothing is Here!',
 
@@ -111,6 +116,12 @@ export default {
   max: 'max',
   min: 'min',
   total: 'total',
+  createdAt: 'createdAt',
+  show: 'show',
+  isPublic: 'isPublic',
+  state: 'state',
+  estate: 'estate',
+  detail: 'detail',
 
   manageAccount: 'Manage Account',
   account: 'Account',
@@ -137,6 +148,8 @@ export default {
   address: 'Address',
   commissionPercentage: 'Commission Percentage',
   commissionLimit: 'Commission Limit',
+  pricePerMeter: 'pricePerMeter',
+  totalPrice: 'totalPrice',
 
   location: 'location',
 

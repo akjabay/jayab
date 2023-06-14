@@ -289,3 +289,15 @@ hr.line-style-two {
   background: #333;
   background-image: linear-gradient(to right, #ccc, #333, #ccc);
 }
+
+
+.ad-low-opacity {
+  opacity: 0.7;
+  font-size: 12px;
+}
+
+.ad-product-card-title {
+  font-size: 18px;
+  color: $ad-font-color;
+  margin: 1.2rem 0.2rem;
+}

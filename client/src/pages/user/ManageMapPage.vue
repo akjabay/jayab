@@ -51,6 +51,7 @@ export default defineComponent({
     async fetch() {
       try {
 
+        this.loaded = false;
         if (this.$route.query && this.$route.query.adding) {
           this.isActive = true;
         }
@@ -64,10 +65,22 @@ export default defineComponent({
           this.$router.push('/accounts/profile/setting');
         }
 
+        const params = {};
+        if (this.filterOptions && typeof this.filterOptions === 'object') {
+          Object.keys(this.filterOptions).forEach((key) => {
+            if (typeof this.filterOptions[key] === 'object' && (Object.keys(this.filterOptions[key]).includes('min'))) {
+              params[key] = `${this.filterOptions[key].min},${this.filterOptions[key].max}`
+            } else {
+              params[key] = this.filterOptions[key];
+            }
+          });
+        }
+
         const result = await api.product.productFindMyProducts({
           sorting: "cteaedAt: -1",
           latlng: this.user && this.user.city ? this.user.city.lat_long : '',
           isMap: true,
+          ...params
         });
 
         if (result.status === 200) {
@@ -87,6 +100,7 @@ export default defineComponent({
         }
         this.loaded = true;
       } catch (error) {
+        this.loaded = true;
         console.log(error);
         this.$q.notify({
           type: "negative",
@@ -94,6 +108,7 @@ export default defineComponent({
           caption: this.$t("failed"),
         });
       }
+      this.loaded = true;
     },
   },
   mounted() {

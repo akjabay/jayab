@@ -1,21 +1,31 @@
 <template>
   <div class="q-pa-md">
-    <q-btn
-      outline
-      no-caps
-      class="full-width ad-secondary-btn"
-      @click="selectDialog = true"
-    >
-      <span v-if="item && item.name">
-        <q-icon class="q-mx-sm" size="xs" :name="item.icon_url" />
-        {{ item.name }}
-        <q-icon class="q-mr-xs" name="check"></q-icon>
-      </span>
-      <span v-else>
-        {{ $t("chooseCity") }}
-        <q-icon class="mr-1" :name="'arrow_' + $t('left')"></q-icon>
-      </span>
-    </q-btn>
+    <div class="row">
+      <div :class="item && item.name ? 'col-11' : 'col-12'">
+        <q-btn
+          outline
+          no-caps
+          class="full-width ad-secondary-btn"
+          @click="selectDialog = true"
+        >
+          <span v-if="item && item.name">
+            <q-icon class="q-mx-sm" size="xs" :name="item.icon_url" />
+            {{ item.name }}
+            <q-icon class="q-mr-xs" name="check"></q-icon>
+          </span>
+          <span v-else>
+            {{ $t("chooseCity") }}
+            <q-icon class="mr-1" :name="'arrow_' + $t('left')"></q-icon>
+          </span>
+        </q-btn>
+      </div>
+      <div v-if="item && item.name" :class="item && item.name ? 'col-1' : 'col-0'">
+       <q-btn @click="onReset" class="q-px-xs q-mx-none ad-font-color" flat>
+        <q-icon name="fa fa-times" />
+       </q-btn>
+      </div>
+    </div>
+    
 
     <q-dialog v-model="selectDialog" :style="'direction: ' + $t('direction')">
       <q-card class="q-pa-none q-ma-none" style="min-width: 350px">
@@ -100,6 +110,7 @@
             {{ $t("cancel") }}
           </q-btn>
         </q-card-actions>
+        <q-inner-loading :showing="!loaded"></q-inner-loading>
       </q-card>
     </q-dialog>
   </div>
@@ -126,12 +137,14 @@ export default defineComponent({
     return {
       secondItems: ref([]),
       selectDialog: ref(false),
+      loaded: ref(true)
     };
   },
   methods: {
     async onSelectParentItem(item) {
 
       try {
+        this.loaded = false;
         const result = await api.main.getCities({
           province_id: item.id,
         });
@@ -151,6 +164,7 @@ export default defineComponent({
           caption: this.$t("failed"),
         });
       }
+      this.loaded = true;
     },
 
     onSelectItem(item) {

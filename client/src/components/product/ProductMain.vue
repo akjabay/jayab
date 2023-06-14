@@ -10,7 +10,7 @@
             <div v-if="product.userId.id === user.id">
               <div class="q-px-md">
                   <span class="">{{ $t('publicMode') }}</span>
-                  <q-toggle v-model="isPublic" @click="onToggle" icon="dark_mode" />
+                  <q-toggle v-model="isPublic" @click="onToggle" icon="people" />
               </div>
             </div>
           </div>
@@ -19,32 +19,61 @@
         <hr class="line-style-two" />
 
         <div class="ad-product-card-title text-bold">{{ product.name }}</div>
-        
-        <category-comp :category="product.categoryId"></category-comp>
-
-        <div class="q-my-sm">
-          {{ product.address }}
-        </div>
-        <div v-if="product.userId && isUserLoggedIn && (user.id == product.userId.id || user.is_superuser == 1)" class="q-my-sm">
-          {{ $t('owner') + ': ' + product.ownerInfo }}
-        </div>
-        <div class="q-my-sm">
-          {{ $t('area') + ': ' + product.area }}
-        </div>
         <div v-if="product.price" class="ad-box q-my-sm">
+          <span>
           {{
             product.price.toString()
               .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
           }}
-          ت
+          </span>
+          <span class="ad-low-opacity">
+            {{ $t('toman') }}
+          </span>
         </div>
         <div v-if="product.pricePerMeter" class="ad-box q-my-sm">
+          <span class="ad-low-opacity">
+            {{ $t('perMeter') + ' ' }}
+          </span>
+          <span>
           {{
-            $t('perMeter') + ' ' +
             product.pricePerMeter.toString()
               .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-          }}
-          ت
+          }} 
+          </span>
+          <span class="ad-low-opacity q-px-xs">
+            {{ $t('toman') }}
+          </span>
+        </div>
+        
+        <category-comp :category="product.categoryId"></category-comp>
+
+
+        <q-separator />
+        <div class="row">
+          <div class="col-12">
+            <div class="row q-my-sm">
+              <span class="ad-low-opacity">{{ $t('totalArea')  }}</span><q-space />
+              <span>{{ product.area }}</span>
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="row q-my-sm">
+              <span class="ad-low-opacity">{{ $t('areaOfBuilding')  }}</span><q-space />
+              <span>{{ product.areaOfBuilding }}</span>
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="row q-my-sm">
+              <span class="ad-low-opacity">{{ $t('address') }}</span><q-space />
+              <span>{{ product.address }}</span>
+            </div>
+          </div>
+        </div>
+        <q-separator />
+
+
+        <div v-if="product.userId && isUserLoggedIn && (user.id == product.userId.id || user.is_superuser == 1)" class="q-my-sm">
+          {{ $t('owner') + ': ' + product.ownerInfo }}
         </div>
 
         <div class="row justify-center q-my-sm" v-if="product.userId && product.userId.phone">
@@ -83,13 +112,13 @@
       </div>
     </div>
 
-    <map-comp ref="map" :liteMode="true" :signleMode="true" :zoom="15" mapWidth="50vh"></map-comp>
-
     <div class="row q-my-sm">
       <date-comp :date="product.createdAt"></date-comp>
       <q-space />
       <actions-comp v-if="product" :item="product"></actions-comp>
     </div>
+
+    <map-comp ref="map" :liteMode="true" :signleMode="true" :zoom="15" mapWidth="50vh"></map-comp>
 
     <q-separator />
   </div>
@@ -181,9 +210,4 @@ export default defineComponent({
 </script>
 
 <style>
-.ad-product-card-title {
-  font-size: 18px;
-  color: #00548c;
-  margin: 2rem 0.25rem;
-}
 </style>

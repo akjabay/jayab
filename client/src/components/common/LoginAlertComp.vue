@@ -2,7 +2,7 @@
   <q-dialog v-model="alert">
     <q-card style="width: 300px">
       <q-card-section :class="$t('direction') == 'rtl' ? 'text-right' : ''">
-        <div class="text-h6">{{ "login" }}</div>
+        <div class="text-h6">{{ $t("login") }}</div>
       </q-card-section>
 
       <q-card-section
@@ -18,14 +18,14 @@
             no-caps
             unelevated
             rounded
-            color="primary"
-            :label="'loginOrSignup'"
+            class="ad-primary-btn"
+            :label="$t('loginOrSignup')"
           />
         </div>
       </q-card-section>
 
       <q-card-actions :align="$t('direction') == 'rtl' ? 'left' : 'right'">
-        <q-btn flat :label="$t('ok')" color="primary" v-close-popup />
+        <q-btn flat :label="$t('ok')" class="ad-font-color" v-close-popup />
       </q-card-actions>
     </q-card>
   </q-dialog>

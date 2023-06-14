@@ -52,6 +52,9 @@
                 @input="onSelectImage"
             />
         </q-card>
+
+        <q-inner-loading :showing="loader"></q-inner-loading>
+        
     </div>
 </template>
 
@@ -84,6 +87,7 @@ export default defineComponent({
         return {
             image: ref(null),
             fileNewName: ref(null),
+            loader: ref(false)
         }
     },
     methods: {
@@ -91,6 +95,7 @@ export default defineComponent({
             this.$refs.fileInput.click();
         },
         async onSelectImage() {
+            this.loader = true;
             const input = this.$refs.fileInput;
             const files = input.files;
             if (files && files[0]) {
@@ -109,14 +114,17 @@ export default defineComponent({
                     this.$emit("image-inputs", this.fileNewName);
                 }
             }
+            this.loader = false;
         },
         async deleteImage() {
             if (this.fileNewName) {
+                this.loader = true;
                 this.$emit("remove-image-input", this.fileNewName);
                 await api.main.uploadDeleteFile({ filename: this.fileNewName });
                 this.fileNewName = null;
                 this.image = null;
                 this.$refs.fileInput.value = null;
+                this.loader = false;
             }
         },
 

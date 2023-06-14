@@ -120,7 +120,7 @@
       <q-separator class="q-my-md" />
     </div>
 
-    <div class="col-12 col-md-10 col-sm-10">
+    <!-- <div class="col-12 col-md-10 col-sm-10">
       <sub-title-comp :title="$t('commissions')"></sub-title-comp>
 
       <div class="row q-my-md">
@@ -170,7 +170,7 @@
 
       <q-separator class="q-my-md" />
 
-    </div>
+    </div> -->
 
     <div class="col-12 col-md-10 col-sm-10">
       <sub-title-comp :title="$t('changePassword')"></sub-title-comp>
@@ -287,12 +287,13 @@ export default defineComponent({
       this.loading = true;
       try {
         if (
-          this.editingUser.password &&
-          this.editingUser.password != this.editingUser.confirmPassword
+          (this.editingUser.password && this.editingUser.confirmPassword) &&
+          this.editingUser.password !== this.editingUser.confirmPassword
         ) {
+          this.loading = false;
           return this.$q.notify({
             type: "negative",
-            message: this.$t("failed"),
+            message: this.$t("passwordIsNotMatch"),
             caption: this.$t("failed"),
           });
         }
@@ -308,6 +309,7 @@ export default defineComponent({
           password: this.editingUser.password,
         });
         if (result.data.errors) {
+          this.loading = false;
           this.$q.notify({
             type: "negative",
             message: this.$t("failed"),
@@ -321,6 +323,7 @@ export default defineComponent({
             message: this.$t("success"),
             caption: this.$t("success"),
           });
+          this.loading = false;
         } else {
           this.$q.notify({
             type: "negative",

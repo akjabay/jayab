@@ -11,7 +11,7 @@
           <q-btn
             flat
             no-caps
-            @click="$router.push('/')"
+            to="/"
             :label="$t('home')"
           />
         </div>
@@ -19,7 +19,7 @@
           <q-btn
             flat
             no-caps
-            @click="$router.push('/products')"
+            to="/items/list"
             :label="$t('products')"
           />
         </div>

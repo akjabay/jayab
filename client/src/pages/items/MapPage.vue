@@ -43,6 +43,7 @@ export default defineComponent({
     },
     async fetchData (args = []) {
       try {
+        this.loaded = false;
         const { page, maxDistance = 100000, center } = args;
         if (page) {
           this.pagination.offset = (page - 1) * this.pagination.limit;
@@ -92,6 +93,7 @@ export default defineComponent({
         this.loaded = true;
 
       } catch (error) {
+        this.loaded = true;
         console.log(error);
         this.$q.notify({
           type: "negative",
@@ -99,6 +101,7 @@ export default defineComponent({
           caption: this.$t("failed"),
         });
       }
+      this.loaded = true;
     },
   },
   mounted () {

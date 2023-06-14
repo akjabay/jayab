@@ -16,7 +16,9 @@ type Product {
     rooms: Int
     details: String
     images: [Image]
+    thumbnail: String
     likes: Likes
+    estate: String
     status: String
     isPublic: Boolean
     categoryId: Category
@@ -46,6 +48,7 @@ input ProductInput {
     rooms: Int
     details: String
     imageUrls: String
+    estate: String
     status: String
     isPublic: Boolean
     categoryId: ID

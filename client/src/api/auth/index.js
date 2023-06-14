@@ -91,6 +91,11 @@ export default {
                   name
                   lat_long
                 }
+                permissions {
+                  id
+                  codename
+                  persian_codename
+                }
                 status_auth
                 avatar_url
               }

@@ -158,7 +158,7 @@ export default defineComponent({
           this.pagination.offset = (page - 1) * this.pagination.limit;
         }
         const username = this.$route.params.userId;
-        if (username === this.user.username) {
+        if (this.user && this.user.username && username === this.user.username) {
           
           const result = await api.product.productFindMyProducts({
             limit: this.pagination.limit,

@@ -173,7 +173,7 @@
             max: ''
           },
         }),
-        rules: ref({})
+        rules: ref({}),
       };
     },
     // watch: {

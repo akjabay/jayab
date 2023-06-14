@@ -64,6 +64,10 @@ export default {
   copyProfileURL: 'کپی آدرس حساب',
   productTitle: 'عنوان ملک',
   price: 'قیمت',
+  realStateName: 'نام مشاور املاک',
+  meter: 'متر',
+  areaOfBuilding: 'مساحت بنا',
+  passwordIsNotMatch: 'رمز عبور مشابه نیست',
 
   emptyList: 'لیست خالی است!',
 
@@ -135,18 +139,27 @@ export default {
   min: 'حداقل',
   total: 'کل',
 
+  title: 'عنوان',
   product: 'ملک',
   products: 'املاک',
   publicProducts: 'املاک عمومی',
   productsTitle: 'املاک',
   newProductsTitle: "املاک جدید",
   trendingProductsTitle: "املاک داغ",
+  pricePerMeter: 'قیمت هر متر',
 
   submitChanges: 'ثبت تغییرات',
   address: 'آدرس',
   commissionPercentage: 'درصد کمیسیون',
   commissionLimit: 'محدودیت کمیسیون',
-
+  totalPrice: 'قیمت کل',
+  createdAt: 'زمان ایجاد',
+  show: 'مشاهده',
+  isPublic: 'عمومی',
+  state: 'وضعیت',
+  estate: 'وضعیت ملکی',
+  detail: 'جزئیات',
+  
   location: 'مکان',
 
   post: 'پست',

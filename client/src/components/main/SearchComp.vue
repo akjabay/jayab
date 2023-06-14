@@ -1,5 +1,5 @@
 <template>
-  <div class="ad-box-bordered">
+  <div class="">
     <filter-comp ref="filterComp" v-on:on-change-filter="onChangeFilter" :filterOptions="filterOptions"></filter-comp>
       <div class="row">
         <q-space></q-space>
@@ -34,7 +34,6 @@ export default defineComponent({
       this.$refs.filterComp.resetState();
     },
     onChangeFilter (filter) {
-      console.log(filter, 'filter filter filter')
       this.filterOptions = filter;
     },
     onClickToSearch () {

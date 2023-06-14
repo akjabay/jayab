@@ -10,8 +10,8 @@
       </div>
       <div class="col-md-2 col-sm-2 col-xs-2" :class="$t('direction') === 'rtl' ? 'text-left' : 'text-right'">
         <q-btn @click="filtering = !filtering" outline class="ad-font-color q-mx-xs" no-caps>
-          <q-icon class="" size="1.5em" v-if="filtering" name="fas fa-caret-up" />
-          <q-icon class="" size="1.5em" v-else name="fa fa-filter" />
+          <q-icon class="" size="1.3em" v-if="filtering" name="fas fa-caret-up" />
+          <q-icon class="" size="1.3em" v-else name="fa fa-filter" />
         </q-btn>
       </div>
     </div>

@@ -131,6 +131,18 @@ const productSchema = new Schema(
             ref: "User",
         },
 
+        estate: {
+            type: String,
+            enum: ["inRent", "sold", "notDetermined"],
+            default: "notDetermined",
+        },
+
+        status: {
+            type: String,
+            enum: ["active", "deleted"],
+            default: "active",
+        }
+
     },
     {
         timestamps: true,

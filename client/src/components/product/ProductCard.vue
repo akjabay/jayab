@@ -1,5 +1,9 @@
 <template>
-  <q-card flat class="q-ma-sm ad-fixed-card ad-box-bordered">
+  <q-card
+    flat
+    class="q-ma-sm ad-fixed-card ad-box-bordered"
+    :class="product && product.status === 'deleted' ? 'bg-red-1' : ''"
+  >
     <!-- <user-small-comp class="col-6" :user="product.userId"></user-small-comp> -->
     <q-img
       v-if="product && product.images.length > 0"
@@ -19,9 +23,14 @@
     <q-card-section class="">
       <a
         @click="$router.push('/products/' + product.pid)"
-        class="ad-box-t text-bold text-pointer"
+        class="text-pointer"
       >
+      <span class="ad-box-t text-bold">
         {{ product.name }}
+      </span>
+      <span class="ad-low-opacity">
+        ({{ product.area }} {{ $t('meter') }})
+      </span>
       </a>
       <!-- <date-comp :date="product.createdAt"></date-comp> -->
       <category-comp class="q-my-none" :category="product.categoryId"></category-comp>
@@ -31,12 +40,16 @@
         v-if="product.price"
         :class="$t('direction') == 'rtl' ? 'text-left' : 'text-right'"
       >
-        <div class="ad-box-date">
-          {{
-            product.price.toString()
-              .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-          }}
-          ت
+        <div class="">
+          <span class="text-bold">
+            {{
+              product.price.toString()
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            }}
+          </span>
+          <span class="q-px-xs ad-low-opacity">
+            {{ $t('toman') }}
+          </span>
         </div>
       </div>
       <div
@@ -44,14 +57,24 @@
         v-if="product.pricePerMeter"
         :class="$t('direction') == 'rtl' ? 'text-left' : 'text-right'"
       >
-        <div class="ad-box-date">
-          {{
-            $t('perMeter') + ' ' +
-            product.pricePerMeter.toString()
-              .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-          }}
-          ت
+        <div class="">
+          <span class="ad-low-opacity">
+            {{ $t('perMeter') + ' ' }}
+          </span>
+          <span class="text-bold">
+            {{
+              product.pricePerMeter.toString()
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            }}
+          </span>
+          <span class="q-px-xs ad-low-opacity">
+            {{ $t('toman') }}
+          </span>
         </div>
+      </div>
+
+      <div class="q-mt-sm ad-low-opacity">
+        {{ product.address }}
       </div>
     </q-card-section>
 
@@ -96,8 +119,5 @@ export default defineComponent({
 </script>
 
 <style>
-.ad-product-card-title {
-  font-size: 18px;
-  color: #00548c;
-}
+
 </style>

@@ -55,6 +55,7 @@ export default defineComponent({
       this.currentPage = page;
     },
     async fetchData (args = []) {
+      this.loaded = false;
       try {
         const { page } = args;
         if (page) {
@@ -87,12 +88,14 @@ export default defineComponent({
 
       } catch (error) {
         console.log(error);
+        this.loaded = true;
         this.$q.notify({
           type: "negative",
           message: this.$t("failed"),
           caption: this.$t("failed"),
         });
       }
+      this.loaded = true;
     },
   },
   computed: {

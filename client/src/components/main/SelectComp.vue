@@ -135,7 +135,7 @@
         type: Array,
         required: false,
         default: ref([])
-      }
+      },
     },
     setup() {
       return {
